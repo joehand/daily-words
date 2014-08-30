@@ -1,0 +1,6 @@
+{%- macro render_css(css_name) -%}
+    {%- assets filters="less, cssutils", output="build/" + css_name + ".%(version)s.min.css",
+      "css/" + css_name + ".less" -%}
+        <link rel="stylesheet" href="{{ ASSET_URL }}">
+    {%- endassets -%}
+{%- endmacro -%}

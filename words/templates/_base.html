@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta http-equiv="ClearType" content="true">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+
+        <!-- DNS prefetch -->
+        <link rel="dns-prefetch" href="//ajax.googleapis.com">
+        {%- if config.PRODUCTION %}
+        <link rel="dns-prefetch" href="//s3.amazonaws.com">
+        {%- endif %}
+
+        <title>{% block title %}Write Your Words{% endblock title %}</title>
+        <meta name="description" content="{% block description %}{% endblock description %}">
+
+        <!-- Styles -->
+        {% block css -%}{%- endblock %}
+
+        <!-- WebFonts -->
+        <script src="//ajax.googleapis.com/ajax/libs/webfont/1.5.3/webfont.js"></script>
+        <script>
+          WebFont.load({
+            google: {
+              families:  [ 'EB+Garamond::latin', 'Open+Sans:400italic,400,700,300:latin' ]
+            }
+          });
+        </script>
+    </head>
+    <body class="{% block body_class %}{% endblock %}">
+        <div role="document" class="document">
+        {%- block siteheader -%}
+        {% endblock siteheader -%}
+
+        {%- block main %}
+            <main role="main" class="main wrapper">
+                <div class="page-content">
+                {%- with messages = get_flashed_messages() -%}
+                      {% if messages %}
+                        <ul class="flashes well">
+                        {% for message in messages %}
+                            <li>{{ message | safe}}</li>
+                        {% endfor %}
+                        </ul>
+                      {% endif %}
+                {%- endwith -%}
+                {%- block content -%}
+                {%- endblock content %}
+                </div> <!-- .page-content  -->
+            </main> <!-- main  -->
+            {%- block sitefooter %}
+            {% endblock sitefooter -%}
+        {%- endblock main %}
+        </div> <!-- document -->
+    {%- block footer_js -%}
+    {%- endblock footer_js %}
+    </body>
+</html>

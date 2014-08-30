@@ -1,0 +1,33 @@
+{%- macro errors(field, description=None) -%}
+    {%- if field.errors %}
+      {%- for error in field.errors %}
+        <p class="help-block">{{error|safe}}</p>
+      {%- endfor %}
+    {%- elif field.description -%}
+      <p class="help-block">{{field.description|safe}}</p>
+    {%- elif description -%}
+      <p class="help-block">{{description|safe}}</p>
+    {%- endif %}
+{%- endmacro %}
+
+{%- macro radio_buttons(field, description=None, label_class=None) -%}
+      <label class="button radio-button small-caps {{label_class}}{% if field.errors %} has-error{% endif %}{% if field.checked %} active{% endif %}">
+        {{field(class="", **kwargs)|safe}}
+        <span class="useicons">{% if field.checked %}&#xe628;{% else %}&#xe627;{% endif %}</span> {{field.data}}
+        {{errors(field, description)}}
+      </label>
+{%- endmacro -%}
+
+{%- macro regular_field(field, description=None, class=None) -%}
+              <div class="form-group{% if field.errors %} has-error{% endif %} {{class}}-group">
+                  {{field.label(class="form-label small-caps")}}
+                  {{field(class=class, **kwargs)|safe}}{{errors(field, description)}}
+              </div>
+{%- endmacro %}
+
+{%- macro no_label_field(field, description=None) -%}
+              <div class="{% if field.errors %}has-error{% endif %}">
+                  {{field(class="", **kwargs)|safe}}
+                  {{errors(field, description)}}
+              </div>
+{%- endmacro -%}
