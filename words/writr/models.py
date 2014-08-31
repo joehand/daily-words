@@ -1,8 +1,10 @@
 from datetime import datetime, date
+import json
 import re
 
 from ..extensions import db
 from ..user import User
+from ..utils import mongo_to_dict
 
 WORDS_TYPED_INTERVAL = 10000 #milliseconds
 
@@ -47,3 +49,15 @@ class Item(db.Document):
             Returns True if is today
         """
         return self.date.date() == date.today()
+
+    def to_dict(self):
+        data = json.loads(self.to_json())
+        data.pop('_id', None)
+        data.pop('_cls', None)
+        data['id'] = str(self.id)
+        data['user_ref'] = str(self.user_ref.id)
+        data['date'] = str(self.date)
+        data['start_time'] = str(self.start_time)
+        data['end_time'] = str(self.end_time)
+        data['last_update'] = str(self.last_update)
+        return json.dumps(data)
