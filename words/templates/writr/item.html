@@ -4,14 +4,20 @@
 {{item.date|format_date}}
 {%- endblock title -%}
 
+{% block body_class %}writr-item{% endblock %}
 
 {%- block content -%}
-<div class="pure-u-1-5"></div>
+<div class="pure-u-1-5">
+    <p>{{is_today}}</p>
+    <p>{{item.to_dict()|tojson}}</p>
+    <div class="item-date">{{item.date|format_date}}</div>
+</div>
 <div class="pure-u-3-5">
-<p>
-{{is_today}}
-{{item.to_dict()|tojson}}
-</p>
+    <div class="l-box writr-item item-content {% if is_today %}writr-edit{% endif %}" {% if is_today %}contenteditable{% endif %}>
+        {% if item.content %}
+        {{item.content}}
+        {% endif %}
+    </div>
 </div>
 <div class="pure-u-1-5"></div>
 {%- endblock -%}
@@ -25,8 +31,9 @@
                                 'id'     : '{{current_user.id}}',
                                 'email'  : '{{current_user.email}}'
                             };
-        {{ config.PROJECT }}.itemBootstrap = {{item.to_dict()|tojson|safe}}
+        {{ config.PROJECT }}.itemsBootstrap = [{{item.to_dict()|tojson|safe}}]
         {{ config.PROJECT }}.is_today = {{is_today|lower}}
+        {{ config.PROJECT }}.apiURL = "{{url_for('writr.ItemAPI:index')}}"
     </script>
     <script data-main="{{ url_for('static', filename='js/config')}}" src="{{ url_for('static', filename='ext/requirejs/require.js')}}"></script>
 {%- endblock footer_js %}
