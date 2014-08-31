@@ -1,9 +1,9 @@
 # -*- coding: utf-8 -*-
 """
-    tests.frontend
+    tests.users
     ~~~~~~~~~~~~~~
 
-    frontend tests package
+    users tests package
 """
 from words import create_app
 from words.user import User, Role
