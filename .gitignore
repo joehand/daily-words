@@ -49,16 +49,12 @@ nosetests.xml
 .Spotlight-V100
 .Trashes
 
-
-###SublimeText###
-
-# SublimeText project files
-/*.sublime-project
-*.sublime-workspace
-sftp-config*.json
+node_modules/*
+**/ext/*
 
 .webassets-cache
 
-*/local.py
 
+###Local Config###
+*/local.py
 words/local.py

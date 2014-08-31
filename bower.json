@@ -1,0 +1,29 @@
+{
+  "name": "words",
+  "version": "0.0.0",
+  "authors": [
+    "Joe Hand <joe.a.hand@gmail.com>"
+  ],
+  "description": "Write 750 words daily",
+  "moduleType": [
+    "amd"
+  ],
+  "license": "MIT",
+  "private": true,
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "words/static/js/libs",
+    "test",
+    "tests"
+  ],
+  "dependencies": {
+    "jquery": "~2.1.1",
+    "requirejs": "~2.1.14",
+    "backbone": "~1.1.2",
+    "underscore": "~1.7.0",
+    "backbone.stickit": "~0.8.0",
+    "pure": "~0.5.0"
+  }
+}

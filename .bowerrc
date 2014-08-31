@@ -1,0 +1,6 @@
+{
+  "directory" : "words/static/ext",
+  "scripts": {
+    "postinstall": "./node_modules/.bin/bower-requirejs -c words/static/js/config.js"
+  }
+}
