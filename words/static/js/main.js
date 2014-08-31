@@ -7,7 +7,22 @@ define([
     'backbone',
     'jquery',
     'underscore',
-], function (Backbone, $, _) {
+    'app/views/AppView',
+    'app/models/AppModel',
+    'app/models/ItemModel',
+    'backbone.stickit',
+], function (Backbone, $, _, AppView, AppModel, Items) {
 
-    console.log('sup')
+    var appView, appModel, itemsCol;
+
+    appModel = new AppModel(NAMESPACE);
+
+    itemsCol = new Items(NAMESPACE.itemsBootstrap, {url:NAMESPACE.apiURL});
+
+    appView = new AppView({
+        model      : appModel,
+        collection : itemsCol,
+        el         : $('.document').get(0),
+    });
+
 });
