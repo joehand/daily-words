@@ -24,7 +24,8 @@ require.config({
     jquery: "../ext/jquery/dist/jquery",
     requirejs: "../ext/requirejs/require",
     underscore: "../ext/underscore/underscore",
-    "backbone.stickit": "../ext/backbone.stickit/backbone.stickit"
+    "backbone.stickit": "../ext/backbone.stickit/backbone.stickit",
+    jasmine: "../ext/jasmine/lib/jasmine-core"
   },
   packages: [
 
