@@ -50,6 +50,23 @@ class Item(db.Document):
         """
         return self.date.date() == date.today()
 
+    def validate_json(self, inputJSON):
+        for key, val in inputJSON.items():
+            if key in ['content', 'end_time']:
+                if key == 'end_time':
+                    try:
+                        val = datetime.utcfromtimestamp(val/1000.0)
+                    except:
+                        continue
+                    # divide by 1000 because JS timestamp is in ms
+                    # http://stackoverflow.com/questions/10286224/javascript-timestamp-to-python-datetime-conversion
+                if val != None and val != 'None':
+                    self[key] = val
+            else:
+                continue
+        return self
+
+
     def to_dict(self):
         data = json.loads(self.to_json())
         data.pop('_id', None)
@@ -60,4 +77,4 @@ class Item(db.Document):
         data['start_time'] = str(self.start_time)
         data['end_time'] = str(self.end_time)
         data['last_update'] = str(self.last_update)
-        return json.dumps(data)
+        return data

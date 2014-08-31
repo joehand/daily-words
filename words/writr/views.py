@@ -1,4 +1,5 @@
 from datetime import date, datetime
+import json
 
 from flask import (Blueprint, current_app, flash, g, jsonify,
                     redirect, render_template, request, url_for)
@@ -52,5 +53,40 @@ class ItemView(FlaskView):
         return render_template('writr/item.html', item=item, is_today=item.is_today())
 
 
-#Register our View Class
+class ItemAPI(FlaskView):
+    """ API Views
+    """
+    route_base = '/api/items'
+    decorators = [login_required]
+
+    @route('/')
+    def index(self):
+        """ Get all items for current user
+        """
+        items = Item.objects(user_ref=current_user.id)
+        return jsonify(items=[item.to_dict() for item in items])
+
+    def get(self, id):
+        """ Get single item by id
+        """
+        item = Item.objects(
+                user_ref=current_user.id, id=id).first()
+        return jsonify(item.to_dict())
+
+    def put(self, id):
+        """ Put single item by id
+        """
+        try:
+            item = Item.objects(id=id).first()
+            item = item.validate_json(json.loads(request.data))
+            item.save()
+            return jsonify(item.to_dict())
+        except:
+            print 'Unexpected error:', sys.exc_info()[0]
+            # TODO Make these more helpful
+            return jsonify(status='error', error=''), 400
+
+
+#Register our View Classes
 ItemView.register(writr)
+ItemAPI.register(writr)

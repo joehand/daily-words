@@ -13,9 +13,9 @@ from ..factories import ItemFactory
 from words.writr import Item
 
 
-class ItemTestCase(WritrTestCase):
+class ItemModelTestCase(WritrTestCase):
     def _create_fixtures(self):
-        super(ItemTestCase, self)._create_fixtures()
+        super(ItemModelTestCase, self)._create_fixtures()
         self.item = ItemFactory(user_ref=self.user.id)
 
     def test_item_created(self):
