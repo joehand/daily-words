@@ -1,3 +1,5 @@
+{% import "macros/_css.html" as css %}
+
 <!DOCTYPE html>
 <html>
     <head>
@@ -16,7 +18,7 @@
         <meta name="description" content="{% block description %}{% endblock description %}">
 
         <!-- Styles -->
-        {% block css -%}{%- endblock %}
+        {% block css -%}{{ css.render_css('main') }}{%- endblock %}
 
         <!-- WebFonts -->
         <script src="//ajax.googleapis.com/ajax/libs/webfont/1.5.3/webfont.js"></script>
@@ -34,7 +36,7 @@
         {% endblock siteheader -%}
 
         {%- block main %}
-            <main role="main" class="main wrapper">
+            <main role="main" class="main pure-g">
                 <div class="page-content">
                 {%- with messages = get_flashed_messages() -%}
                       {% if messages %}

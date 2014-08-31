@@ -1,5 +1,7 @@
 {% extends "writr/_writr_base.html" %}
 
 {%- block content -%}
-Writr Dashboard
+<h3>Writr Dashboard</h3>
+<a href="{{url_for('.write')}}">Write Today</a>
+{{current_user.email}}
 {%- endblock -%}
