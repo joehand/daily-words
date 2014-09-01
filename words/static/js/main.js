@@ -7,9 +7,9 @@ define([
     'backbone',
     'jquery',
     'underscore',
-    'app/views/AppView',
-    'app/models/AppModel',
-    'app/models/ItemModel',
+    'views/app',
+    'models/app',
+    'models/items',
     'backbone.stickit',
 ], function (Backbone, $, _, AppView, AppModel, Items) {
 

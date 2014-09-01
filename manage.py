@@ -9,6 +9,8 @@ from flask_script import Manager, Shell, Server
 from flask_security import MongoEngineUserDatastore
 from flask_security.utils import encrypt_password
 
+from tests import testjs
+
 from words import create_app
 from words.config import ProductionConfig, DevelopmentConfig
 from words.extensions import db, assets
@@ -20,6 +22,14 @@ else:
     app = create_app()
 
 manager = Manager(app)
+
+@manager.command
+def jasmine():
+    """ Runs server for Jasmine JS tests
+        Default URL = http://0.0.0.0:5000/
+    """
+    testjs.run_server()
+
 
 @manager.command
 def initdb():
@@ -37,6 +47,8 @@ def initdb():
 
 @manager.command
 def routes():
+    """ Prints out all the routes to shell
+    """
     import urllib
     output = []
     for rule in app.url_map.iter_rules():

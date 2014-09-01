@@ -10,7 +10,7 @@ require.config({
       ],
       exports: "Backbone"
     },
-    'backbone.stickit': {
+    "backbone.stickit": {
       deps: [
         "backbone"
       ]
@@ -19,21 +19,27 @@ require.config({
       exports: "_"
     },
     jasmine: {
-        exports: 'jasmine'
+      exports: "jasmine"
     },
-    'jasmine-html': {
-        deps: ['jasmine'],
-        exports: 'jasmine'
+    "jasmine-html": {
+      deps: [
+        "jasmine"
+      ],
+      exports: "jasmine"
     }
-},
+  },
   paths: {
+    models: "app/models",
+    views: "app/views",
     backbone: "../ext/backbone/backbone",
     jquery: "../ext/jquery/dist/jquery",
     requirejs: "../ext/requirejs/require",
     underscore: "../ext/underscore/underscore",
-    'backbone.stickit': "../ext/backbone.stickit/backbone.stickit",
-    jasmine: "../ext/jasmine/lib/jasmine-core/jasmine",
-    'jasmine-html': '../ext/jasmine/lib/jasmine-core/jasmine-html',
+    "backbone.stickit": "../ext/backbone.stickit/backbone.stickit",
+    jasmine: "../ext/jasmine/lib/jasmine-core",
+    "jasmine-html": "../ext/jasmine/lib/jasmine-core/jasmine-html",
+    sinon: "../ext/sinon/lib/sinon",
+    "jasmine-sinon": "../ext/jasmine-sinon/lib/jasmine-sinon"
   },
   packages: [
 

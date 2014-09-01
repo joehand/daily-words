@@ -16,7 +16,7 @@ define([
         },
 
         initialize: function(opt) {
-            var user = opt.user;
+            
         }
     });
 

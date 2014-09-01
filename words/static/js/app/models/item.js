@@ -1,5 +1,5 @@
 /* ========================================================================
- * Item Model and Collection
+ * Item Model
  * Author: JoeHand
  * ========================================================================
  */
@@ -11,16 +11,14 @@ define([
 
     var Item = Backbone.Model.extend({
         initialize: function(opts) {
-            this.url = this.collection.url + this.id;
+            if (!_.isUndefined(this.get('content'))) {
+                this.setWordCount();
+            }
         },
-    });
-
-    var Items = Backbone.Collection.extend({
-        model : Item,
-        initialize: function(models, opts) {
-            this.url = opts.url;
+        setWordCount: function() {
+            this.set('wordCount', this.get('content').split(' ').length);
         }
     });
 
-    return Items;
+    return Item;
 });
