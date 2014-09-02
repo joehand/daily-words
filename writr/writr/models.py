@@ -1,12 +1,22 @@
+# -*- coding: utf-8 -*-
+"""
+    writr.writr.models
+    ~~~~~~~~~
+
+    Writr models.
+
+    :copyright: (c) 2014 by Joe Hand.
+    :license:
+"""
+
 from datetime import datetime, date
 import json
 import re
 
 from ..extensions import db
 from ..user import User
-from ..utils import mongo_to_dict
 
-WORDS_TYPED_INTERVAL = 10000 #milliseconds
+WORDS_TYPED_INTERVAL = 10000 # milliseconds
 
 class Item(db.Document):
     """ This is the main model.
@@ -32,12 +42,16 @@ class Item(db.Document):
             }
 
     def clean(self):
-        """ Runs on each save()
+        """ Runs on each save
+
+            Currently:
+             - Updates last_update time to now
+
         """
         self.last_update = datetime.utcnow() #Refresh last update timestamp
 
     def word_count(self):
-        """ Counts the words in item's content!
+        """ Returns number of words in item's content
         """
         if self.content:
             words = re.findall('\w+', self.content, flags=re.I)
@@ -51,15 +65,21 @@ class Item(db.Document):
         return self.date.date() == date.today()
 
     def validate_json(self, inputJSON):
+        """ Validates & cleans json from API before save
+            Returns cleaned up JSON
+
+            Validations/Cleans:
+             - Update datetime from JS to Python
+        """
         for key, val in inputJSON.items():
             if key in ['content', 'end_time']:
                 if key == 'end_time':
                     try:
+                        # divide by 1000 because JS timestamp is in ms
+                        # http://stackoverflow.com/questions/10286224/javascript-timestamp-to-python-datetime-conversion
                         val = datetime.utcfromtimestamp(val/1000.0)
                     except:
                         continue
-                    # divide by 1000 because JS timestamp is in ms
-                    # http://stackoverflow.com/questions/10286224/javascript-timestamp-to-python-datetime-conversion
                 if val != None and val != 'None':
                     self[key] = val
             else:
@@ -68,6 +88,9 @@ class Item(db.Document):
 
 
     def to_dict(self):
+        """ MongoDB Object to Dict Object
+            Returns dict of model
+        """
         data = json.loads(self.to_json())
         data.pop('_id', None)
         data.pop('_cls', None)

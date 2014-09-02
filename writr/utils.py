@@ -1,3 +1,14 @@
+# -*- coding: utf-8 -*-
+"""
+    writr.utils
+    ~~~~~~~~~
+
+    Writr utility function. TODO: clean the junk out.
+
+    :copyright: (c) 2014 by Joe Hand.
+    :license:
+"""
+
 from __future__ import unicode_literals
 import base64
 from datetime import datetime

@@ -1,3 +1,14 @@
+# -*- coding: utf-8 -*-
+"""
+    writr.writr.view
+    ~~~~~~~~~
+
+    Writr views.
+
+    :copyright: (c) 2014 by Joe Hand.
+    :license:
+"""
+
 from datetime import date, datetime
 import json
 
@@ -13,6 +24,7 @@ writr = Blueprint('writr', __name__, url_prefix='')
 
 class ItemView(FlaskView):
     """ Main Views
+        Routes for User-Facing Pages
     """
     route_base = '/'
     decorators = [login_required]
@@ -23,8 +35,12 @@ class ItemView(FlaskView):
     @route('/', endpoint='dash')
     def index(self):
         """ Dashboard of writr. Must be logged in.
-            Will show streak, interesting stats.
-            Big link to write today.
+            Returns index template for writr dashboard
+
+            TODO:
+            - Will show streak, interesting stats.
+            - Big link to write today.
+
         """
         flash('Logged In')
         return render_template('writr/index.html')
@@ -33,6 +49,8 @@ class ItemView(FlaskView):
     @route('/<item_date>/', endpoint='item')
     def get(self, item_date=None):
         """ Writing View
+            Returns single item to write/view
+
             Show current item (today) and make editable
             Or show old item, not editable
         """
@@ -55,6 +73,7 @@ class ItemView(FlaskView):
 
 class ItemAPI(FlaskView):
     """ API Views
+        All accessed via JS to get/update items
     """
     route_base = '/api/items'
     decorators = [login_required]
@@ -87,6 +106,6 @@ class ItemAPI(FlaskView):
             return jsonify(status='error', error=''), 400
 
 
-#Register our View Classes
+#Register our View Classes on the blueprint
 ItemView.register(writr)
 ItemAPI.register(writr)

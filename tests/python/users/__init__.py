@@ -22,15 +22,19 @@ class UserTestCase(AppTestCase):
 
     def test_user_created(self):
         user = User.objects()
-        assert len(user) == 1
+        self.assertEquals(len(user),1)
 
     def test_roles(self):
         roles = Role.objects()
         role = roles.first()
-        assert len(roles) == 1
-        assert role.name == 'admin'
-        assert role.description == 'Administrator'
+        self.assertEquals(len(roles),1)
+        self.assertEquals(role.name,'admin')
+        self.assertEquals(role.description,'Administrator')
 
     def test_user_page(self):
         r = self.get('/user')
         self.assert404(r)
+
+    def test_user_avatar(self):
+        #TODO!
+        self.assertEquals(True,False)

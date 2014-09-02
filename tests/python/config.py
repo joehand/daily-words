@@ -1,9 +1,9 @@
 # -*- coding: utf-8 -*-
 """
-    tests.settings
+    tests.config
     ~~~~~~~~~~~~~~
 
-    tests settings module
+    testing configuration
 """
 
 from words.config import Config

@@ -1,5 +1,5 @@
 {
-  "name": "words",
+  "name": "writr",
   "version": "0.0.0",
   "description": "Write 750 words daily",
   "main": "app.js",

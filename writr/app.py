@@ -1,3 +1,14 @@
+# -*- coding: utf-8 -*-
+"""
+    words.app
+    ~~~~~~~~~
+
+    This module creates the words application and configures extensions/blueprints
+
+    :copyright: (c) 2014 by Joe Hand.
+    :license:
+"""
+
 import os
 
 from flask import Flask, render_template
@@ -19,7 +30,7 @@ DEFAULT_BLUEPRINTS = (
 )
 
 def create_app(config=None, app_name=None, blueprints=None):
-    '''Create a Flask app.'''
+    """Create a Flask app."""
 
     if app_name is None:
         app_name = Config.PROJECT
@@ -38,7 +49,14 @@ def create_app(config=None, app_name=None, blueprints=None):
     return app
 
 def configure_app(app, config=None):
-    '''Different ways of configurations.'''
+    """ Allow for various configurations
+        Default is Local (if available) or Development
+
+        Local config to keep track non-public things (pw, api details, etc.)
+        These will be stored in env variables for production
+
+        See config.py for more details
+    """
 
     # http://flask.pocoo.org/docs/api/#configuration
     if config:
@@ -54,33 +72,23 @@ def configure_extensions(app):
     # flask-mongoengine
     db.init_app(app)
 
-    # flask-mail
-    mail.init_app(app)
-
-    # Setup Flask-Security
+    # flask-security
     user_datastore = MongoEngineUserDatastore(db, User, Role)
     security.init_app(app, user_datastore)
 
-    # Flask assets
+    # flask-assets
     assets.init_app(app)
 
-    # markdown
-    md.init_app(app)
-
-    # flask s3
-    s3.init_app(app)
-
-    if app.debug:
-        from flask.ext.debugtoolbar import DebugToolbarExtension
-        toolbar = DebugToolbarExtension(app)
-
 def configure_blueprints(app, blueprints):
-    '''Configure blueprints in views.'''
+    """ Configure blueprints from list above or arg."""
 
     for blueprint in blueprints:
         app.register_blueprint(blueprint)
 
 def configure_template_filters(app):
+    """ Add template filters here.
+        These functions will be available in the jinja template.
+    """
 
     @app.template_filter()
     def format_date(value, format='%d %b %Y'):
@@ -92,19 +100,26 @@ def configure_template_filters(app):
 
 
 def configure_logging(app):
-    '''Configure file(info) and email(error) logging.'''
+    """ Configure logging for testing or production emails
+
+        Not being used right now. TODO: this.
+    """
 
     if app.debug or app.testing:
         #skip loggin
         return
 
 def configure_hook(app):
+    """ Applicaiton wide hooks (before, after requests)
+    """
 
     @app.before_request
     def before_request():
         pass
 
 def configure_error_handlers(app):
+    """ Error pages, just in case =)
+    """
 
     @app.errorhandler(403)
     def forbidden_page(error):

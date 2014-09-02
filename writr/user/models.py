@@ -1,3 +1,14 @@
+# -*- coding: utf-8 -*-
+"""
+    writr.user.models
+    ~~~~~~~~~
+
+    User models. Mostly controled by Flask-Security user models.
+
+    :copyright: (c) 2014 by Joe Hand.
+    :license:
+"""
+
 from hashlib import md5
 
 from flask_security import login_required, RoleMixin, UserMixin

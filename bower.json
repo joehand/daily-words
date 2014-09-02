@@ -1,5 +1,5 @@
 {
-  "name": "words",
+  "name": "writr",
   "version": "0.0.0",
   "authors": [
     "Joe Hand <joe.a.hand@gmail.com>"
@@ -14,7 +14,7 @@
     "**/.*",
     "node_modules",
     "bower_components",
-    "words/static/js/libs",
+    "writr/static/js/libs",
     "test",
     "tests"
   ],

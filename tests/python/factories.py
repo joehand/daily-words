@@ -3,7 +3,7 @@
     tests.factories
     ~~~~~~~~~~~~~~~
 
-    Overholt test factories module
+    Test factories module
 """
 
 from datetime import datetime, date
