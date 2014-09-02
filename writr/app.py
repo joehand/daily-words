@@ -19,7 +19,7 @@ from .user import user, User, Role
 from .utils import prettydate
 
 from .config import Config, DevelopmentConfig, ProductionConfig
-from .extensions import db, mail, security, assets, md, s3
+from .extensions import db, security, assets
 
 # For import *
 __all__ = ['create_app']
