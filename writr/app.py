@@ -14,17 +14,19 @@ import os
 from flask import Flask, render_template
 from flask_security import MongoEngineUserDatastore
 
-from .writr import writr
+from .frontend import frontend
 from .user import user, User, Role
-from .utils import prettydate
+from .writr import writr
 
 from .config import Config, DevelopmentConfig, ProductionConfig
 from .extensions import db, security, assets
+from .utils import prettydate
 
 # For import *
 __all__ = ['create_app']
 
 DEFAULT_BLUEPRINTS = (
+    frontend,
     user,
     writr,
 )
@@ -57,7 +59,6 @@ def configure_app(app, config=None):
 
         See config.py for more details
     """
-
     # http://flask.pocoo.org/docs/api/#configuration
     if config:
         app.config.from_object(config)
