@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 """
-    writr.frontend.views
+    words.frontend.views
     ~~~~~~~~~
 
     Frontend for writr for non-authenticated users
@@ -21,7 +21,7 @@ class Frontend(FlaskView):
     """ Frontend View Class
     """
 
-    route_base = '/'
+    route_base = '/hello'
 
     @route('/', endpoint='index')
     def index(self):

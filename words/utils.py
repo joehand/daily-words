@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 """
-    writr.utils
+    words.utils
     ~~~~~~~~~
 
     Writr utility function. TODO: clean the junk out.

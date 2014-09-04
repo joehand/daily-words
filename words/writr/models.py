@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 """
-    writr.writr.models
+    words.writr.models
     ~~~~~~~~~
 
     Writr models.

@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 """
-    writr.user.models
+    words.user.models
     ~~~~~~~~~
 
     User models. Mostly controled by Flask-Security user models.

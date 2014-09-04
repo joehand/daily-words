@@ -11,10 +11,10 @@ from flask_security.utils import encrypt_password
 
 from tests import testjs
 
-from writr import create_app
-from writr.config import ProductionConfig, DevelopmentConfig
-from writr.extensions import db, assets
-from writr.user import User, Role
+from words import create_app
+from words.config import ProductionConfig, DevelopmentConfig
+from words.extensions import db, assets
+from words.user import User, Role
 
 if os.environ.get('PRODUCTION'):
     app = create_app(config = ProductionConfig)

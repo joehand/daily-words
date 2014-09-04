@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 """
-    writr.writr
+    words.writr
     ~~~~~~~~~
 
     Writr blueprint. This is the main blueprint. Where the magic happens.

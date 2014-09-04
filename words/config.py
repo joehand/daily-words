@@ -1,9 +1,9 @@
 # -*- coding: utf-8 -*-
 """
-    writr.config
+    words.config
     ~~~~~~~~~
 
-    Config file for writr app (dev and production)
+    Config file for words app (dev and production)
 
     :copyright: (c) 2014 by Joe Hand.
     :license:
@@ -14,7 +14,7 @@ basedir = os.path.abspath(os.path.dirname(__file__))
 
 class Config(object):
 
-    PROJECT = 'writr'
+    PROJECT = 'words'
 
     # Get project and app root path
     PROJECT_ROOT = os.path.abspath(os.path.dirname(os.path.dirname(__file__)))

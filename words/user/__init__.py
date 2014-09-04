@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 """
-    writr.user
+    words.user
     ~~~~~~~~~
 
     User blueprint for writr. Controls user models.

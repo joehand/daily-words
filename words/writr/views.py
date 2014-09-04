@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 """
-    writr.writr.view
+    words.writr.view
     ~~~~~~~~~
 
     Writr views.
@@ -54,7 +54,10 @@ class ItemView(FlaskView):
             Show current item (today) and make editable
             Or show old item, not editable
         """
-        item_date = datetime.strptime(item_date, '%d-%b-%Y') if item_date else g.today
+        if item_date:
+            item_date = datetime.strptime(item_date, '%d-%b-%Y')
+        else:
+            item_date = g.today
 
         item = Item.objects(
                 user_ref=current_user.id, date=item_date).first()

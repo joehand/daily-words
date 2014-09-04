@@ -1,12 +1,12 @@
 # -*- coding: utf-8 -*-
 """
-    writr
+    words.frontend
     ~~~~~~~~~
 
-    Daily writing application built with Flask.
+    Frontend for writr for non-authenticated users
 
     :copyright: (c) 2014 by Joe Hand.
     :license:
 """
 
-from app import *
+from .views import frontend

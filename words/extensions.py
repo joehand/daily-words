@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 """
-    writr.extensions
+    words.extensions
     ~~~~~~~~~
 
     Extensions file for writr app

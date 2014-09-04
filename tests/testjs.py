@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 """
-    writr.tests.testjs
+    words.tests.testjs
     ~~~~~~~~~
 
     Runs server for Jasmine specRunner.html.
@@ -19,7 +19,7 @@ from flask import (Flask, request, make_response, render_template,
 TEST_DIR = join(abspath(dirname(__file__)),'js')
 
 # Static dir for writr.app
-APP_STATIC = join(abspath(dirname(__file__)),'..','writr','static')
+APP_STATIC = join(abspath(dirname(__file__)),'..','words','static')
 
 app = Flask(__name__, static_folder=APP_STATIC, template_folder=TEST_DIR)
 

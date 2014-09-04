@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 """
-    writr.user.view
+    words.user.view
     ~~~~~~~~~
 
     User view. Nothing to see here. YET!!!! (TODO)

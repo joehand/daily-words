@@ -1,4 +1,4 @@
-from wrtir import create_app, config
+from words import create_app, config
 
 app = create_app(config=config.ProductionConfig)
 
