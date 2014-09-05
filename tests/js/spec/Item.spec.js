@@ -2,14 +2,14 @@ describe("Item Model :: ", function() {
     var ItemModel;
 
     beforeEach(function(done) {
-        require(['models/item'], function(_ItemModel) {
+        require(['models/items', 'models/item'], function(_ItemsCollection,_ItemModel) {
             ItemModel = _ItemModel;
+            this.ItemsCollection = _ItemsCollection;
             done();
         });
     });
 
     describe('when instantiated : ', function() {
-
         beforeEach(function() {
             this.item = new ItemModel({
                     'content':'Coffee is delicious',
@@ -17,11 +17,28 @@ describe("Item Model :: ", function() {
         });
 
         it("should exhibit attributes", function() {
-            expect(this.item.get('content')).toEqual('Coffee is delicious');
+            expect(this.item.get('content'))
+                .toEqual('Coffee is delicious');
         });
 
         it("should generate a word count", function() {
-            expect(this.item.get('wordCount')).toEqual(3);
+            expect(this.item.get('word_count'))
+                .toEqual(3);
+        });
+
+        it("should generate a last update time", function() {
+            expect(this.item.get('last_update')/100)
+                .toBeCloseTo(new Date().getTime()/100, 0);
+        });
+
+        it("should create a words typed array", function() {
+            expect(this.item.get('typing_speed').length)
+                .toEqual(1);
+            expect(this.item.get('typing_speed')[0])
+                .toEqual({
+                    'word_delta' : 3,
+                    'time_delta' : 0,
+                })
         });
 
         describe("url", function() {
@@ -45,8 +62,103 @@ describe("Item Model :: ", function() {
             });
           });
         });
+    }); // describe when instantiated
 
-    });
+
+    describe('when changed : ', function() {
+        beforeEach(function() {
+            this.item = new ItemModel({
+                    'content':'Coffee is delicious',
+                });
+        });
+
+        it("should update the word count", function() {
+            this.item
+                .set('content', 'Coffee is really really delicious!');
+            expect(this.item.get('word_count'))
+                .toEqual(5);
+        });
+
+        it("should update last update time", function() {
+            this.item.set('content', 'Bleep Bloop');
+            expect(this.item.get('last_update')/100)
+                .toBeCloseTo(new Date().getTime()/100, 0);
+        });
+
+        it("should add to words typed array", function() {
+            this.item
+                .set('content', 'Coffee is delicious, I think.');
+
+            var time_delta = new Date().getTime() - this.item.previous('last_update');
+
+            expect(this.item.get('typing_speed').length)
+                .toEqual(2);
+            expect(this.item.get('typing_speed')[1])
+                .toEqual({
+                    'word_delta' : 2,
+                    'time_delta' : time_delta,
+                });
+        });
+
+    }); // describe when changed
+
+
+    describe("API interaction : ", function() {
+        beforeEach(function() {
+            this.server = sinon.fakeServer.create();
+            this.item = new ItemModel({id:123});
+            this.item.urlRoot = '/api' // no collection to use URL base from
+        });
+
+        afterEach(function() {
+            this.server.restore();
+        });
+
+        it("should fire the change event on GET", function() {
+            var callback = sinon.spy();
+
+            // Set how the fake server will respond
+            this.server.respondWith("GET", "/api/123",
+              [200, {"Content-Type": "application/json"},
+              '{"id":123,"content":"Sunshine is oh so nice!"}']);
+
+            // Bind to the change event on the model
+            this.item.bind('change', callback);
+
+            // makes an ajax request to the server
+            this.item.fetch();
+
+            // Fake server responds to the request
+            this.server.respond();
+
+            // Expect that the spy was called with the new model
+            expect(callback.called).toBeTruthy();
+            expect(callback.getCall(0).args[0].attributes)
+                .toEqual(jasmine.objectContaining({
+                    id: 123,
+                    content: "Sunshine is oh so nice!"
+                }));
+        });
+
+        it("should make the correct server request when saved", function() {
+            // Spy on jQuery's ajax method
+            var spy = sinon.spy(jQuery, 'ajax');
+
+            this.item.set('content', 'mmm chocolate');
+            // Save the model
+            this.item.save();
+
+            // Spy was called
+            expect(spy).toHaveBeenCalled();
+            // Check url property of first argument
+            expect(spy.getCall(0).args[0].url)
+                .toEqual("/api/123");
+
+            // Restore jQuery.ajax to normal
+            jQuery.ajax.restore();
+        });
+
+    }); // describe API interaction
 });
 
 

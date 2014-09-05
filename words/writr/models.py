@@ -16,7 +16,6 @@ import re
 from ..extensions import db
 from ..user import User
 
-WORDS_TYPED_INTERVAL = 10000 # milliseconds
 
 class Item(db.Document):
     """ This is the main model.
@@ -26,16 +25,11 @@ class Item(db.Document):
     content = db.StringField()
     date = db.DateTimeField(default=date.today(), required=True, unique_with='user_ref')
     start_time = db.DateTimeField(default=datetime.utcnow(), required=True)
-    end_time = db.DateTimeField() # recorded when goal is met
     last_update = db.DateTimeField(default=datetime.utcnow(), required=True)
 
-    # List of number of words typed every 10 seconds
-    # TODO: IS this the best way to track? Or should I track time per interval of words
-    # Used this because this will be easier in JS to check word count every 10 sec
-    words_typed = db.ListField(default = [])
-    # Time Interval for list above (ms)
-    words_typed_interval = db.IntField(default=WORDS_TYPED_INTERVAL)
-
+    # List of dicts containing change in words & time
+    #    {word_delta:int, time_delta:int}
+    typing_speed = db.SortedListField(db.DictField(), default = [])
 
     meta = {
             'ordering': ['-date']
