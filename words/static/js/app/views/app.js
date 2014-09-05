@@ -16,8 +16,20 @@ define([
 
         },
 
-        initialize: function(opt) {
-            this.render()
+        initialize: function(opts) {
+            var self = this;
+
+            if (opts.childView != null) {
+                /* Require our child views for specific page */
+                require(['views/' + opts.childView], function (View) {
+                    self.childView = new View({
+                        collection: self.collection,
+                    });
+                    self.render();
+                });
+            } else {
+                self.render();
+            }
         },
 
         render: function() {

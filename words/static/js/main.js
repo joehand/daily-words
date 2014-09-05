@@ -23,6 +23,7 @@ define([
         model      : appModel,
         collection : itemsCol,
         el         : $('.document').get(0),
+        childView  : NAMESPACE.childView,
     });
 
 });

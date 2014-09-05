@@ -34,11 +34,10 @@ describe("Item Model :: ", function() {
         it("should create a words typed array", function() {
             expect(this.item.get('typing_speed').length)
                 .toEqual(1);
-            expect(this.item.get('typing_speed')[0])
-                .toEqual({
-                    'word_delta' : 3,
-                    'time_delta' : 0,
-                })
+            expect(this.item.get('typing_speed')[0]['word_delta'])
+                .toEqual(3)
+            expect(this.item.get('typing_speed')[0]['time_delta']/100)
+                .toBeCloseTo(0, 0)
         });
 
         describe("url", function() {
@@ -57,7 +56,7 @@ describe("Item Model :: ", function() {
 
           describe("when id is set", function() {
             it("should return the collection URL and id", function() {
-              this.item.set('id', 1);
+              this.item.set('_id', 1);
               expect(this.item.url()).toEqual("/api/1");
             });
           });
@@ -106,7 +105,7 @@ describe("Item Model :: ", function() {
     describe("API interaction : ", function() {
         beforeEach(function() {
             this.server = sinon.fakeServer.create();
-            this.item = new ItemModel({id:123});
+            this.item = new ItemModel({_id:123});
             this.item.urlRoot = '/api' // no collection to use URL base from
         });
 

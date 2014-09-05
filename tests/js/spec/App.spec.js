@@ -21,7 +21,20 @@ describe("App Model :: ", function() {
         });
 
         it("should set defaults", function() {
-            expect(app.get('contentDirty')).toEqual(false);
+            expect(app.get('dirty')).toEqual(false);
+        });
+
+    });
+
+
+    describe('when children models are changed', function() {
+
+        beforeEach(function() {
+            app = new AppModel({'user':fakeUser})
+        });
+
+        xit("should update dirty", function() {
+            expect(app.get('dirty')).toEqual(true);
         });
 
     });

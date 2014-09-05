@@ -88,11 +88,14 @@ class Item(db.Document):
             TODO: Do I need this? Or just use the one in utils?
         """
         data = json.loads(self.to_json())
-        data.pop('_id', None)
         data.pop('_cls', None)
         for key, val in data.items():
             if key == 'user_ref':
                 data[key] = str(self[key].id)
+            elif key == '_id':
+                data[key] = str(self.id)
+            elif key == 'last_update':
+                data[key] = self[key].isoformat()
             else:
-                data[key] = str(self[key])
+                data[key] = self[key]
         return data

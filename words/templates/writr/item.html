@@ -7,19 +7,27 @@
 {% block body_class %}writr-item{% endblock %}
 
 {%- block content -%}
-<div class="pure-u-1-5">
-    <p>{{is_today}}</p>
-    <p>{{item.to_dict()|tojson}}</p>
-    <div class="item-date">{{item.date|format_date}}</div>
-</div>
-<div class="pure-u-3-5">
-    <div class="l-box writr-item item-content {% if is_today %}writr-edit{% endif %}" {% if is_today %}contenteditable{% endif %}>
-        {% if item.content %}
-        {{item.content}}
+<div id="writr-item" data-id="{{item.id}}" class="content-wrapper">
+    <div class="pure-u-1-5">
+        <p>{{is_today}}</p>
+        <p>{{item.to_dict()|tojson}}</p>
+        <div class="item-date">{{item.date|format_date}}</div>
+    </div>
+    <div class="pure-u-3-5">
+        {% if is_today %}
+        <textarea class="l-box item-content writr-edit" autofocus="true">
+            {%- if item.content -%}
+            {{item.content}}
+            {%- endif -%}
+        </textarea>
+        {% else %}
+        <div class="l-box item-content writr-stale">
+            {{item.content}}
+        </div>
         {% endif %}
     </div>
+    <div class="pure-u-1-5"></div>
 </div>
-<div class="pure-u-1-5"></div>
 {%- endblock -%}
 
 
@@ -34,6 +42,7 @@
         {{ config.PROJECT }}.itemsBootstrap = [{{item.to_dict()|tojson|safe}}]
         {{ config.PROJECT }}.is_today = {{is_today|lower}}
         {{ config.PROJECT }}.apiURL = "{{url_for('writr.ItemAPI:index')}}"
+        {{ config.PROJECT }}.childView = "item"
     </script>
     <script data-main="{{ url_for('static', filename='js/config')}}" src="{{ url_for('static', filename='ext/requirejs/require.js')}}"></script>
 {%- endblock footer_js %}

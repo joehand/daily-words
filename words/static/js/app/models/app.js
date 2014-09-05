@@ -12,12 +12,12 @@ define([
     var App = Backbone.Model.extend({
 
         defaults: {
-            'contentDirty' : false,
+            'dirty' : false,
         },
 
         initialize: function(opt) {
-            
-        }
+
+        },
     });
 
     return App;

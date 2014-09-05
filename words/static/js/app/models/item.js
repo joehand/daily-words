@@ -11,27 +11,41 @@ define([
 
     var Item = Backbone.Model.extend({
 
+        idAttribute: '_id',
+
         defaults: {
             'last_update': new Date().getTime(),
             'word_count': 0,
+            'content' : '',
         },
 
         initialize: function(opts) {
-            if (!_.isUndefined(this.get('content'))) {
-                this.setWordCount();
-                this.updateWordsTyped(false);
+            if (!_.isUndefined(this.get('last_update'))) {
+                var date = new Date(this.get('last_update'));
+                this.set('last_update', date.getTime())
             }
+            if (this.get('content') !== '') {
+                this.setWordCount();
+            }
+
+            this.updateWordsTyped(false);
+            this.set('last_update', new Date().getTime());
+
             this.on('change:content', this.onContentChange, this);
         },
 
         onContentChange: function() {
+            this.set('dirty', true);
             this.setWordCount();
             this.updateTime();
             this.updateWordsTyped(true);
         },
 
         setWordCount: function() {
-            this.set('word_count', this.get('content').split(' ').length);
+            var regex = /\s+/gi,
+                len = this.get('content').trim()
+                        .replace(regex, ' ').split(' ').length;
+            this.set('word_count', len);
         },
 
         updateWordsTyped: function(previous) {
@@ -41,7 +55,7 @@ define([
               - change in time
             */
             var wordDelta = this.get('word_count') || 0,
-                timeDelta = 0,
+                timeDelta = new Date().getTime() - this.get('last_update'),
                 typingSpeed = this.get('typing_speed') || [];
 
             if (previous === true) {
