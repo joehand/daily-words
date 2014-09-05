@@ -84,14 +84,15 @@ class Item(db.Document):
     def to_dict(self):
         """ MongoDB Object to Dict Object
             Returns dict of model
+
+            TODO: Do I need this? Or just use the one in utils?
         """
         data = json.loads(self.to_json())
         data.pop('_id', None)
         data.pop('_cls', None)
-        data['id'] = str(self.id)
-        data['user_ref'] = str(self.user_ref.id)
-        data['date'] = str(self.date)
-        data['start_time'] = str(self.start_time)
-        data['end_time'] = str(self.end_time)
-        data['last_update'] = str(self.last_update)
+        for key, val in data.items():
+            if key == 'user_ref':
+                data[key] = str(self[key].id)
+            else:
+                data[key] = str(self[key])
         return data

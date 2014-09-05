@@ -35,6 +35,11 @@ define([
         },
 
         updateWordsTyped: function(previous) {
+            /*Updates typing_speed array (previous = true when not new model)
+              For each change event, record:
+              - change in word count (could be negative)
+              - change in time
+            */
             var wordDelta = this.get('word_count') || 0,
                 timeDelta = 0,
                 typingSpeed = this.get('typing_speed') || [];
