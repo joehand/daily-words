@@ -85,7 +85,7 @@ describe("Item Model :: ", function() {
                 .toBeCloseTo(new Date().getTime()/100, 0);
         });
 
-        it("should add to words typed array", function() {
+        it("should add to typing speed array", function() {
             this.item
                 .set('content', 'Coffee is delicious, I think.');
 
