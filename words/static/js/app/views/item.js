@@ -11,7 +11,7 @@ define([
 ], function (Backbone, _, $) {
 
     var RATE_LIMIT_CHARS = 50,
-        RATE_LIMIT_TIME = 5000;
+        RATE_LIMIT_TIME = 2000;
 
     var ItemView = Backbone.View.extend({
 
@@ -24,20 +24,30 @@ define([
                 updateView: false,
                 updateModel: '_rateLimiter'
             },
+            '.item-dirty' : 'dirty',
+            '.item-word-count' : 'word_count',
+
         },
 
         _rateLimiter: function(val, e, opts) {
             /*Limits rate of model change events
               Limiters:
+              - Model not dirty but new content
               - Time (RATE_LIMIT_TIME)
               - Characters added/removed (RATE_LIMIT_CHARS)
-              - Newline character
+              - Newline character/Space
 
               Returns True/False whether to update model
             */
+            if (!this.model.get('dirty')) {
+                // update right away if we are just starting, sets dirty=True
+                return true;
+            }
+
             if (val !== '' &&
-                        !_.isNull(val[val.length-1].match(/[\n\r]/g))) {
-                // Match newline character to adjust input size
+                        !_.isNull(val[val.length-1].match(/[\n\r\s]/g))) {
+                // Match newline or space character to adjust input size & wordcount
+                // TODO: This also matches any change if old newline is at bottom
                 return true;
             }
 
@@ -47,7 +57,7 @@ define([
 
             charsUpperLimit = contentLen + RATE_LIMIT_CHARS < val.length;
             charsLowerLimit = contentLen - RATE_LIMIT_CHARS > val.length;
-            timeLimit = lastUpdate + RATE_LIMIT_TIME < event.timeStamp
+            timeLimit = lastUpdate + RATE_LIMIT_TIME < e.timeStamp
 
             return charsUpperLimit || charsLowerLimit || timeLimit;
         },
@@ -76,7 +86,6 @@ define([
 
         contentChanged: function() {
             console.log('model changed');
-            //console.log(this.model);
 
             this.adjustContentSize();
         },

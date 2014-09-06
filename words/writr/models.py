@@ -29,7 +29,7 @@ class Item(db.Document):
 
     # List of dicts containing change in words & time
     #    {word_delta:int, time_delta:int}
-    typing_speed = db.SortedListField(db.DictField(), default = [])
+    typing_speed = db.ListField(db.DictField(), default = [])
 
     meta = {
             'ordering': ['-date']
@@ -46,6 +46,7 @@ class Item(db.Document):
 
     def word_count(self):
         """ Returns number of words in item's content
+            TODO: Does this match count I am doing on JS side for typing_speed?
         """
         if self.content:
             words = re.findall('\w+', self.content, flags=re.I)
@@ -56,7 +57,10 @@ class Item(db.Document):
         """ Check if this model is today's model
             Returns True if is today
         """
-        return self.date.date() == date.today()
+        try:
+            return self.date.date() == date.today() # this may fail if item was just created, why?
+        except:
+            return self.date == date.today()
 
     def validate_json(self, inputJSON):
         """ Validates & cleans json from API before save
@@ -66,16 +70,17 @@ class Item(db.Document):
              - Update datetime from JS to Python
         """
         for key, val in inputJSON.items():
-            if key in ['content', 'end_time']:
-                if key == 'end_time':
-                    try:
-                        # divide by 1000 because JS timestamp is in ms
-                        # http://stackoverflow.com/questions/10286224/javascript-timestamp-to-python-datetime-conversion
-                        val = datetime.utcfromtimestamp(val/1000.0)
-                    except:
-                        continue
-                if val != None and val != 'None':
-                    self[key] = val
+            if key in ['last_update']:
+                try:
+                    # divide by 1000 because JS timestamp is in ms
+                    # http://stackoverflow.com/questions/10286224/javascript-timestamp-to-python-datetime-conversion
+                    val = datetime.utcfromtimestamp(val/1000.0)
+                except:
+                    continue
+            elif key == 'content' and val != None and val != 'None':
+                self[key] = val
+            elif key == 'typing_speed' and len(val):
+                self[key] = val
             else:
                 continue
         return self
@@ -94,7 +99,7 @@ class Item(db.Document):
                 data[key] = str(self[key].id)
             elif key == '_id':
                 data[key] = str(self.id)
-            elif key == 'last_update':
+            elif key in ['date','start_time','last_update']:
                 data[key] = self[key].isoformat()
             else:
                 data[key] = self[key]

@@ -20,6 +20,8 @@
             {{item.content}}
             {%- endif -%}
         </textarea>
+        <div class="item-dirty">{{item.dirty}}</div>
+        <div class="item-word-count">{{item.word_count()}}</div>
         {% else %}
         <div class="l-box item-content writr-stale">
             {{item.content}}

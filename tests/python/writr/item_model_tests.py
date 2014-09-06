@@ -34,7 +34,7 @@ class ItemModelTestCase(WritrTestCase):
         item = Item.objects().first()
         self.assertEqual(item.word_count(), 100)
 
-    def test_item_clean_last_update(self):
+    def test_item_last_update(self):
         item = Item.objects().first()
         item.content = 'joe'
         item.save()

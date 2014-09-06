@@ -65,7 +65,7 @@ class ItemView(FlaskView):
         if item is None:
             if item_date == g.today:
                 # Create a new item for today
-                item = Item(user_ref=current_user.id, date=g.today)
+                item = Item(user_ref=current_user.id)
                 item.save()
             else:
                 flash('No item found for date: %s' %
@@ -98,6 +98,7 @@ class ItemAPI(FlaskView):
     def put(self, id):
         """ Put single item by id
         """
+        print('put happened')
         try:
             item = Item.objects(id=id).first()
             item = item.validate_json(json.loads(request.data))

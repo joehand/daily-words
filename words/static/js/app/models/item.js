@@ -9,6 +9,8 @@ define([
     'underscore'
 ], function (Backbone, _) {
 
+    var SAVE_DELAY = 5000;
+
     var Item = Backbone.Model.extend({
 
         idAttribute: '_id', //MongoDB ID attr
@@ -41,8 +43,26 @@ define([
             this.set('dirty', true);
             this.setWordCount();
             this.updateTime();
-            this.updateWordsTyped(true);
+
+            this.checkSave();
         },
+
+        checkSave: _.debounce(function() {
+            /*Saves model to server after time duration
+            */
+            this.updateWordsTyped(true);
+
+            this.save(null, {
+                success: function(model, resp, opts) {
+                    model.set('dirty', false);
+                    console.log('server save success');
+                },
+                error: function(val, resp, opts)  {
+                    // TODO
+                    console.log('server error');
+                }
+            });
+        }, SAVE_DELAY),
 
         setWordCount: function() {
             var regex = /\s+/gi,
@@ -57,13 +77,17 @@ define([
               - change in word count (could be negative)
               - change in time
             */
-            var wordDelta = this.get('word_count') || 0,
+            var wordDelta = 0,
                 timeDelta = new Date().getTime() - this.get('last_update'),
                 typingSpeed = this.get('typing_speed') || [];
 
             if (previous === true) {
                 wordDelta = this.get('word_count') - this.previous('word_count');
                 timeDelta = this.get('last_update') - this.previous('last_update');
+            } else {
+                if (typingSpeed.length === 0) {
+                    wordDelta = this.get('word_count');
+                }
             }
 
             typingSpeed.push({
