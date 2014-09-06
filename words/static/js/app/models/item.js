@@ -11,16 +11,18 @@ define([
 
     var Item = Backbone.Model.extend({
 
-        idAttribute: '_id',
+        idAttribute: '_id', //MongoDB ID attr
 
         defaults: {
             'last_update': new Date().getTime(),
             'word_count': 0,
             'content' : '',
+            'dirty' : false,
         },
 
         initialize: function(opts) {
             if (!_.isUndefined(this.get('last_update'))) {
+                // need to make sure this is JS timestamp
                 var date = new Date(this.get('last_update'));
                 this.set('last_update', date.getTime())
             }
@@ -28,9 +30,10 @@ define([
                 this.setWordCount();
             }
 
-            this.updateWordsTyped(false);
+            this.updateWordsTyped(false); // adds time for break from last update
             this.set('last_update', new Date().getTime());
 
+            // watch for changes; fired by StickIt binding.
             this.on('change:content', this.onContentChange, this);
         },
 

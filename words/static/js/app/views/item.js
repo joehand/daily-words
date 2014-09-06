@@ -26,7 +26,21 @@ define([
             },
         },
 
-        _rateLimiter: function(val, event, opts) {
+        _rateLimiter: function(val, e, opts) {
+            /*Limits rate of model change events
+              Limiters:
+              - Time (RATE_LIMIT_TIME)
+              - Characters added/removed (RATE_LIMIT_CHARS)
+              - Newline character
+
+              Returns True/False whether to update model
+            */
+            if (val !== '' &&
+                        !_.isNull(val[val.length-1].match(/[\n\r]/g))) {
+                // Match newline character to adjust input size
+                return true;
+            }
+
             var charsLimit = false, timeLimit = false,
                 contentLen = this.model.get('content').length || 0,
                 lastUpdate = this.model.get('last_update');
@@ -43,12 +57,14 @@ define([
         },
 
         initialize: function(opts) {
-            var id = this.$el.data('id');
-            this.model = this.collection.get(id);
-            if (this.$el.hasClass('writr-edit')) {
+            this.id = this.$el.data('id');
+            this.$inputEl = this.$el.find('.item-content');
+            this.model = this.collection.get(this.id);
+
+            if (this.$inputEl.hasClass('writr-edit')) {
                 this.adjustContentSize();
             }
-            this.listenTo(this.model, 'change:content', this.changed);
+            this.listenTo(this.model, 'change:content', this.contentChanged);
             this.render();
         },
 
@@ -58,14 +74,17 @@ define([
             return this;
         },
 
-        changed: function() {
+        contentChanged: function() {
             console.log('model changed');
-            console.log(this.model);
+            //console.log(this.model);
+
+            this.adjustContentSize();
         },
 
         adjustContentSize: function() {
-            this.$el.height( this.$el[0].scrollHeight );
-            if (this.$el[0].selectionStart == this.$el.val().length) {
+            this.$inputEl.height( 0 );
+            this.$inputEl.height( this.$inputEl[0].scrollHeight );
+            if (this.$inputEl[0].selectionStart == this.$inputEl.val().length) {
                 // keep scroll at bottom if we are there, typewriter effect
                 $(document).scrollTop($(document).height());
             }
