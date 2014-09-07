@@ -18,6 +18,11 @@ define([
 
         initialize: function(opts) {
             var self = this;
+            this.listenTo(this.collection, 'change:dirty', this.setDirty);
+            this.listenTo(this.collection, 'change:local_save', this.offlineSave);
+            this.listenTo(this.collection, 'sync', this.collectionSync);
+
+            this.listenTo(this.model, 'change:offline', this.checkOnline)
 
             if (opts.childView != null) {
                 /* Require our child views for specific page */
@@ -28,7 +33,7 @@ define([
                     self.render();
                 });
             } else {
-                self.render();
+                this.render();
             }
         },
 
@@ -36,6 +41,26 @@ define([
             console.log(this);
             return this;
         },
+
+        setDirty: function(model, val, opts) {
+            console.log('dirty collection');
+            this.model.set('dirty', model.get('dirty'))
+        },
+
+        offlineSave: function(model, val, opts) {
+            console.log('offline save');
+            this.model.set('offline', model.get('local_save'))
+        },
+
+        collectionSync: function() {
+            console.log('sync collection');
+        },
+
+        checkOnline: function() {
+            if (!this.model.get('offline')) {
+                this.collection.syncDirtyAndDestroyed();
+            }
+        }
 
     });
 

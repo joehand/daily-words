@@ -11,6 +11,7 @@ define([
     'models/app',
     'models/items',
     'backbone.stickit',
+    'Backbone.dualStorage',
 ], function (Backbone, $, _, AppView, AppModel, Items) {
 
     var appView, appModel, itemsCol;

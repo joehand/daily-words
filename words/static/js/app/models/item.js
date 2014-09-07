@@ -63,11 +63,18 @@ define([
             this.save(null, {
                 success: function(model, resp, opts) {
                     model.set('dirty', false);
-                    console.log('server save success');
+                    if (opts.dirty) {
+                        // saved locally
+                        model.set('local_save', true);
+                        console.info('Data saved locally');
+                    } else {
+                        // saved remotely
+                        console.log('server save success');
+                    }
                 },
                 error: function(val, resp, opts)  {
                     // TODO
-                    console.log('server error');
+                    console.error('server error');
                 }
             });
         },
