@@ -10,7 +10,30 @@ define([
     'jquery',
 ], function (Backbone, _, $) {
 
+    var OFFLINE_MESSAGE = "Offline!",
+        ONLINE_MESSAGE = 'App Online. Write Away!',
+        ONLINE_MESSAGE_FADE = 5000, // ms to show online message
+        WINDOW_CLOSE_MESSAGE = "========================= \
+                                Content not saved! Please save before leaving. \
+                                =========================";
+
     var AppView = Backbone.View.extend({
+
+        /* Bindings for Backbone.StickIt. Binds Model to Element for sync*/
+        bindings: {
+            '.app-offline' : {
+                observe: 'offline',
+                update: function($el, val, model, options) {
+                    if (model.get('offline') === true) {
+                        $el.addClass('offline');
+                        $el.text(OFFLINE_MESSAGE).fadeIn('slow');
+                    } else {
+                        $el.removeClass('offline');
+                        $el.text(ONLINE_MESSAGE).fadeOut(ONLINE_MESSAGE_FADE);
+                    }
+                }
+            },
+        },
 
         events: {
 
@@ -22,7 +45,7 @@ define([
             this.listenTo(this.collection, 'change:local_save', this.offlineSave);
             this.listenTo(this.collection, 'sync', this.collectionSync);
 
-            this.listenTo(this.model, 'change:offline', this.checkOnline)
+            this.listenTo(this.model, 'change:offline', this.checkServer)
 
             if (opts.childView != null) {
                 /* Require our child views for specific page */
@@ -39,6 +62,7 @@ define([
 
         render: function() {
             console.log(this);
+            this.stickit();
             return this;
         },
 
@@ -56,7 +80,7 @@ define([
             console.log('sync collection');
         },
 
-        checkOnline: function() {
+        checkServer: function() {
             if (!this.model.get('offline')) {
                 this.collection.syncDirtyAndDestroyed();
             }

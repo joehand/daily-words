@@ -10,9 +10,6 @@ define([
     'jquery',
 ], function (Backbone, _, $) {
 
-    var RATE_LIMIT_CHARS = 50,
-        RATE_LIMIT_TIME = 2000;
-
     var ItemView = Backbone.View.extend({
 
         el: "#writr-item",

@@ -9,7 +9,9 @@ define([
     'underscore'
 ], function (Backbone, _) {
 
-    var ONLINE_CHECK_DELAY = 5000; //time to wait between pinging server to see if it is up.
+    var SERVER_CHECK_DELAY = 1000,//initial wait between pinging server to see if it is up.
+        SERVER_CHECK_DELAY_MULT = 2, // multiplier for above between each check.
+        SERVER_CHECK_DELAY_MAX = 60000; // max time to wait between checks
 
     var App = Backbone.Model.extend({
 
@@ -19,11 +21,14 @@ define([
         },
 
         initialize: function(opt) {
-            this.on('change:offline', this.checkOnline, this);
+            this.on('change:offline', this.checkServer, this);
         },
 
-        checkOnline: function() {
-            var collection = this.collection;
+        checkServer: function() {
+            if (!this.get('offline')) {
+                // Don't run if we are back online
+                return;
+            }
 
             $.ajax({
                 context: this,
@@ -33,12 +38,19 @@ define([
                     this.set('offline', false);
                 },
                 error: function() {
-                    console.info('Server Not Connected, Trying Again');
+                    console.info('Server Not Connected, Trying Again in: ', SERVER_CHECK_DELAY/1000, ' s');
+                    this.set('server_check_delay', SERVER_CHECK_DELAY);
 
                     // https://github.com/jashkenas/underscore/issues/494
                     _(function() {
-                        this.checkOnline();
-                    }).chain().bind(this).delay(ONLINE_CHECK_DELAY);
+                        this.checkServer();
+                    }).chain().bind(this).delay(SERVER_CHECK_DELAY);
+
+                    if (SERVER_CHECK_DELAY <= SERVER_CHECK_DELAY_MAX) {
+                        SERVER_CHECK_DELAY = SERVER_CHECK_DELAY_MULT * SERVER_CHECK_DELAY;
+                    } else {
+                        SERVER_CHECK_DELAY = SERVER_CHECK_DELAY_MAX;    
+                    }
                 }
             });
         }

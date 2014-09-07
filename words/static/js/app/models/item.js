@@ -9,7 +9,7 @@ define([
     'underscore'
 ], function (Backbone, _) {
 
-    var SAVE_DELAY = 5000;
+    var SAVE_DELAY = 2500;
 
     var Item = Backbone.Model.extend({
 
