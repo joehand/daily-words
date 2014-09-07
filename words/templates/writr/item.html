@@ -8,7 +8,11 @@
 
 {%- block content -%}
 <div id="writr-item" data-id="{{item.id}}" class="pure-g">
-    <div class="pure-u-5-24">{{item.date|format_date}}</div>
+    <div class="pure-u-5-24">
+        <div class="item-date">
+            {{item.date|format_date}}
+        </div>
+    </div>
     <div class="pure-u-14-24">
         {% if is_today %}
         <div class="item-content writr-edit" autofocus="true" contenteditable="true">
@@ -22,9 +26,13 @@
         </div>
         {% endif %}
     </div>
-    <div class="pure-u-5-24 stats">
-        <div class="item-dirty"></div>
-        <div class="item-word-count">{{item.word_count()}}</div>
+    <div class="pure-u-5-24">
+        <div class="item-stats">
+            <div class="item-dirty"></div>
+            <div class="item-words">
+                <span class="item-words-count">{{item.word_count()}}</span> Words
+            </div>
+        </div>
     </div>
 </div>
 {%- endblock -%}

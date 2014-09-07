@@ -25,11 +25,13 @@ define([
                 observe: 'offline',
                 update: function($el, val, model, options) {
                     if (model.get('offline') === true) {
-                        $el.addClass('offline');
-                        $el.text(OFFLINE_MESSAGE).fadeIn('slow');
+                        $el.addClass('offline')
+                            .text(OFFLINE_MESSAGE)
+                            .fadeIn('slow');
                     } else {
-                        $el.removeClass('offline');
-                        $el.text(ONLINE_MESSAGE).fadeOut(ONLINE_MESSAGE_FADE);
+                        $el.text(ONLINE_MESSAGE)
+                            .fadeOut(ONLINE_MESSAGE_FADE)
+                            .removeClass('offline');
                     }
                 }
             },

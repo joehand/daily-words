@@ -14,6 +14,14 @@ body.writr-item { // All Single Item Pages (editable or not)
         padding:2em 3em;
     }
 
+    .app-offline {
+        position:fixed;
+        display:none;
+        *.offline {
+            display:block;
+        }
+    }
+
     .item-content {
         width:100%;
         padding:1em 0 3em;
@@ -24,10 +32,20 @@ body.writr-item { // All Single Item Pages (editable or not)
         }
     }
 
-    .stats {
+    .item-stats {
         text-align:right;
+        font-variant:small-caps;
+        right:1em;
         position:fixed;
     }
+
+    .item-date {
+        font-variant:small-caps;
+        left:1em;
+        position:fixed;
+    }
+
+
 
     .item-dirty {
         &.dirty {
