@@ -8,30 +8,31 @@
 
    ======= */
 
-
 body.writr-item { // All Single Item Pages (editable or not)
 
-    .writr-edit { // main writing/content area
-        //min-height:80%;
+    .page-content {
+        padding:2em 3em;
     }
 
     .item-content {
         width:100%;
+        padding:1em 0 3em;
+        min-height:300px;
         border:none;
         &:focus {
             outline:none;
         }
     }
 
-
-
-    .pure-g > div {
-        -webkit-box-sizing: border-box;
-        -moz-box-sizing: border-box;
-        box-sizing: border-box;
+    .stats {
+        text-align:right;
+        position:fixed;
     }
-    .l-box {
-        padding: 1em;
+
+    .item-dirty {
+        &.dirty {
+            color:red;
+        }
     }
 
 }

@@ -7,28 +7,25 @@
 {% block body_class %}writr-item{% endblock %}
 
 {%- block content -%}
-<div id="writr-item" data-id="{{item.id}}" class="content-wrapper">
-    <div class="pure-u-1-5">
-        <p>{{is_today}}</p>
-        <p>{{item.to_dict()|tojson}}</p>
-        <div class="item-date">{{item.date|format_date}}</div>
-    </div>
-    <div class="pure-u-3-5">
+<div id="writr-item" data-id="{{item.id}}" class="pure-g">
+    <div class="pure-u-5-24"></div>
+    <div class="pure-u-14-24">
         {% if is_today %}
-        <textarea class="l-box item-content writr-edit" autofocus="true">
+        <div class="item-content writr-edit" autofocus="true" contenteditable="true">
             {%- if item.content -%}
-            {{item.content}}
+            {{item.content|safe}}
             {%- endif -%}
-        </textarea>
-        <div class="item-dirty">{{item.dirty}}</div>
-        <div class="item-word-count">{{item.word_count()}}</div>
+        </div>
         {% else %}
-        <div class="l-box item-content writr-stale">
+        <div class="item-content writr-stale">
             {{item.content}}
         </div>
         {% endif %}
     </div>
-    <div class="pure-u-1-5"></div>
+    <div class="pure-u-5-24 stats">
+        <div class="item-dirty"></div>
+        <div class="item-word-count">{{item.word_count()}}</div>
+    </div>
 </div>
 {%- endblock -%}
 

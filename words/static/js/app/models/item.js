@@ -49,9 +49,17 @@ define([
 
         checkSave: _.debounce(function() {
             /*Saves model to server after time duration
+              Check if it is dirty b/c doSave() can be run directly
+            */
+            if (this.get('dirty') == true) {
+                this.doSave();
+            }
+        }, SAVE_DELAY),
+
+        doSave: function() {
+            /*Saves model to server
             */
             this.updateWordsTyped(true);
-
             this.save(null, {
                 success: function(model, resp, opts) {
                     model.set('dirty', false);
@@ -62,7 +70,7 @@ define([
                     console.log('server error');
                 }
             });
-        }, SAVE_DELAY),
+        },
 
         setWordCount: function() {
             var regex = /\s+/gi,

@@ -22,48 +22,38 @@ define([
             '.item-content' : {
                 observe: 'content',
                 updateView: false,
-                updateModel: '_rateLimiter'
             },
-            '.item-dirty' : 'dirty',
+            '.item-dirty' : {
+                observe: 'dirty',
+                update: function($el, val, model, options) {
+                    if (model.get('dirty') === true) {
+                        $el.addClass('dirty');
+                        $el.text('Unsaved');
+                    } else {
+                        $el.removeClass('dirty');
+                        $el.text('Saved');
+                    }
+                }
+            },
             '.item-word-count' : 'word_count',
-
-        },
-
-        _rateLimiter: function(val, e, opts) {
-            /*Limits rate of model change events
-              Limiters:
-              - Model not dirty but new content
-              - Time (RATE_LIMIT_TIME)
-              - Characters added/removed (RATE_LIMIT_CHARS)
-              - Newline character/Space
-
-              Returns True/False whether to update model
-            */
-            if (!this.model.get('dirty')) {
-                // update right away if we are just starting, sets dirty=True
-                return true;
-            }
-
-            if (val !== '' &&
-                        !_.isNull(val[val.length-1].match(/[\n\r\s]/g))) {
-                // Match newline or space character to adjust input size & wordcount
-                // TODO: This also matches any change if old newline is at bottom
-                return true;
-            }
-
-            var charsLimit = false, timeLimit = false,
-                contentLen = this.model.get('content').length || 0,
-                lastUpdate = this.model.get('last_update');
-
-            charsUpperLimit = contentLen + RATE_LIMIT_CHARS < val.length;
-            charsLowerLimit = contentLen - RATE_LIMIT_CHARS > val.length;
-            timeLimit = lastUpdate + RATE_LIMIT_TIME < e.timeStamp
-
-            return charsUpperLimit || charsLowerLimit || timeLimit;
         },
 
         events: {
+            'keydown .item-content' : '_contentKeypress',
+        },
 
+        _contentKeypress: function(e) {
+            this.scrollBottom();
+            if (e.keyCode == 13) {
+                e.preventDefault();
+                document.execCommand('insertHTML', false, '<br><br>');
+                return false;
+            } else if ((e.ctrlKey || e.metaKey) && e.which == 83) {
+                e.preventDefault();
+                this.model.doSave();
+                return false;
+            }
+            return true;
         },
 
         initialize: function(opts) {
@@ -71,9 +61,6 @@ define([
             this.$inputEl = this.$el.find('.item-content');
             this.model = this.collection.get(this.id);
 
-            if (this.$inputEl.hasClass('writr-edit')) {
-                this.adjustContentSize();
-            }
             this.listenTo(this.model, 'change:content', this.contentChanged);
             this.render();
         },
@@ -81,20 +68,33 @@ define([
         render: function() {
             console.log(this);
             this.stickit();
+            this.$inputEl.focus();
             return this;
         },
 
         contentChanged: function() {
             console.log('model changed');
-
-            this.adjustContentSize();
         },
 
-        adjustContentSize: function() {
-            this.$inputEl.height( 0 );
-            this.$inputEl.height( this.$inputEl[0].scrollHeight );
-            if (this.$inputEl[0].selectionStart == this.$inputEl.val().length) {
-                // keep scroll at bottom if we are there, typewriter effect
+        scrollBottom: function() {
+            // http://stackoverflow.com/questions/7451468/contenteditable-div-how-can-i-determine-if-the-cursor-is-at-the-start-or-end-o/7478420#7478420
+            var el = this.$inputEl[0],
+                atEnd = false,
+                selRange, testRange;
+
+            if (window.getSelection) {
+                var sel = window.getSelection();
+                if (sel.rangeCount) {
+                    selRange = sel.getRangeAt(0);
+                    testRange = selRange.cloneRange();
+
+                    testRange.selectNodeContents(el);
+                    testRange.setStart(selRange.endContainer, selRange.endOffset);
+                    atEnd = (testRange.toString() == "");
+                }
+            }
+
+            if (atEnd === true) {
                 $(document).scrollTop($(document).height());
             }
         },
