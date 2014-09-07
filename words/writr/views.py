@@ -98,7 +98,6 @@ class ItemAPI(FlaskView):
     def put(self, id):
         """ Put single item by id
         """
-        print('put happened')
         try:
             item = Item.objects(id=id).first()
             item = item.validate_json(json.loads(request.data))

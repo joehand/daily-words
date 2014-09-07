@@ -13,6 +13,8 @@ from datetime import datetime, date
 import json
 import re
 
+import bleach
+
 from ..extensions import db
 from ..user import User
 
@@ -78,6 +80,8 @@ class Item(db.Document):
                 except:
                     continue
             elif key == 'content' and val != None and val != 'None':
+                val = bleach.clean(bleach.linkify(val.replace('<br>', '\n')))
+                val = val.replace('\n','<br>') # TODO: Bleach should be able to keep these
                 self[key] = val
             elif key == 'typing_speed' and len(val):
                 self[key] = val

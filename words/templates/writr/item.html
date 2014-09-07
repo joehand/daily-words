@@ -18,7 +18,7 @@
         </div>
         {% else %}
         <div class="item-content writr-stale">
-            {{item.content}}
+            {{item.content|markdown|safe}}
         </div>
         {% endif %}
     </div>

@@ -14,6 +14,8 @@ import os
 from flask import Flask, render_template
 from flask_security import MongoEngineUserDatastore
 
+import mistune
+
 from .frontend import frontend
 from .user import user, User, Role
 from .writr import writr
@@ -98,6 +100,11 @@ def configure_template_filters(app):
     @app.template_filter()
     def time_ago(value):
         return prettydate(value)
+
+    @app.template_filter()
+    def markdown(value):
+        value = value.replace('<br>','\n') # TODO: this is happening because of bleach. See writr.model
+        return mistune.markdown(value)
 
 
 def configure_logging(app):
