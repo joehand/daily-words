@@ -15,6 +15,11 @@ require.config({
         "backbone"
       ]
     },
+    "Backbone.dualStorage": {
+      deps: [
+        "backbone"
+      ]
+    },
     underscore: {
       exports: "_"
     },
@@ -39,7 +44,8 @@ require.config({
     jasmine: "../ext/jasmine/lib/jasmine-core",
     "jasmine-html": "../ext/jasmine/lib/jasmine-core/jasmine-html",
     sinon: "../ext/sinon/lib/sinon",
-    "jasmine-sinon": "../ext/jasmine-sinon/lib/jasmine-sinon"
+    "jasmine-sinon": "../ext/jasmine-sinon/lib/jasmine-sinon",
+    "Backbone.dualStorage": "../ext/Backbone.dualStorage/Backbone.dualStorage"
   },
   packages: [
 
