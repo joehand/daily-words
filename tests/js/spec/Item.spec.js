@@ -72,7 +72,6 @@ describe("Item Model :: ", function() {
                 });
         });
 
-
         it("should set dirty to true", function() {
             this.item
                 .set('content', 'Okay dokey!');
@@ -87,7 +86,7 @@ describe("Item Model :: ", function() {
                 .toEqual(5);
         });
 
-        it("should update last update time", function() {
+        it("should change last update time", function() {
             this.item.set('content', 'Bleep Bloop');
             expect(this.item.get('last_update')/100)
                 .toBeCloseTo(new Date().getTime()/100, 0);
@@ -125,6 +124,19 @@ describe("Item Model :: ", function() {
                     });
             });
         }); // describe after delay
+
+        describe('when offline ', function() {
+            // TODO: How do I get this to work?
+
+            xit("should save locally", function() {
+
+            });
+
+            xit("should add offline attribute", function() {
+
+            });
+
+        }); // describe when offline
 
     }); // describe when changed
 
