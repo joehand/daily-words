@@ -40,9 +40,7 @@ class ItemView(FlaskView):
             TODO:
             - Will show streak, interesting stats.
             - Big link to write today.
-
         """
-        flash('Logged In')
         return render_template('writr/index.html')
 
     @route('/write/', endpoint='write')
@@ -55,7 +53,10 @@ class ItemView(FlaskView):
             Or show old item, not editable
         """
         if item_date:
-            item_date = datetime.strptime(item_date, '%d-%b-%Y')
+            try:
+                item_date = datetime.strptime(item_date, '%d-%b-%Y')
+            except:
+                return redirect(url_for('dash'))
         else:
             item_date = g.today
 

@@ -17,6 +17,8 @@
         <title>{% block title %}Write Your Words{% endblock title %}</title>
         <meta name="description" content="{% block description %}{% endblock description %}">
 
+        <link rel="shortcut icon" href="{{ url_for('static', filename='favicon.ico') }}">
+
         <!-- Styles -->
         {% block css -%}{{ css.render_css('main') }}{%- endblock %}
 

@@ -3,5 +3,5 @@
 {%- block content -%}
 <h3>Writr Dashboard</h3>
 <a href="{{url_for('.write')}}">Write Today</a>
-{{current_user.email}}
+<img src="{{current_user.avatar(124)}}"/>
 {%- endblock -%}
