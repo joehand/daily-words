@@ -56,6 +56,7 @@ class ItemView(FlaskView):
             try:
                 item_date = datetime.strptime(item_date, '%d-%b-%Y')
             except:
+                flash('Please enter a date in the proper format')
                 return redirect(url_for('dash'))
         else:
             item_date = g.today
