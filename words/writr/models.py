@@ -18,6 +18,7 @@ import bleach
 from ..extensions import db
 from ..user import User
 
+WORD_GOAL = 750
 
 class Item(db.Document):
     """ This is the main model.
@@ -50,8 +51,11 @@ class Item(db.Document):
         """ Returns number of words in item's content
             TODO: Does this match count I am doing on JS side for typing_speed?
         """
+        regex = '/\s+/gi'
         if self.content:
-            words = re.findall('\w+', self.content, flags=re.I)
+            content = self.content.strip().replace('<br>', ' ')
+            words = re.sub(regex, ' ', content).split()
+            words = [word for word in words if re.match('[\w]+', word) is not None]
             return len(words)
         return 0
 
@@ -63,6 +67,12 @@ class Item(db.Document):
             return self.date.date() == date.today() # this may fail if item was just created, why?
         except:
             return self.date == date.today()
+
+    def reached_goal(self):
+        """ Returns True/False on whether word count >= 750
+            TODO: Make goal adjustable
+        """
+        return self.word_count() >= WORD_GOAL
 
     def validate_json(self, inputJSON):
         """ Validates & cleans json from API before save
@@ -88,7 +98,6 @@ class Item(db.Document):
             else:
                 continue
         return self
-
 
     def to_dict(self):
         """ MongoDB Object to Dict Object

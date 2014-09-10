@@ -41,7 +41,8 @@ class ItemView(FlaskView):
             - Will show streak, interesting stats.
             - Big link to write today.
         """
-        return render_template('writr/index.html')
+        items = Item.objects(user_ref=current_user.id)
+        return render_template('writr/index.html', items=items)
 
     @route('/write/', endpoint='write')
     @route('/<item_date>/', endpoint='item')

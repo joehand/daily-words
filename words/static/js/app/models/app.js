@@ -21,10 +21,10 @@ define([
         },
 
         initialize: function(opt) {
-            this.on('change:offline', this.checkServer, this);
+            this.on('change:offline', this.checkServerConnection, this);
         },
 
-        checkServer: function() {
+        checkServerConnection: function() {
             if (!this.get('offline')) {
                 // Don't run if we are back online
                 return;
@@ -43,13 +43,13 @@ define([
 
                     // https://github.com/jashkenas/underscore/issues/494
                     _(function() {
-                        this.checkServer();
+                        this.checkServerConnection();
                     }).chain().bind(this).delay(SERVER_CHECK_DELAY);
 
                     if (SERVER_CHECK_DELAY <= SERVER_CHECK_DELAY_MAX) {
                         SERVER_CHECK_DELAY = SERVER_CHECK_DELAY_MULT * SERVER_CHECK_DELAY;
                     } else {
-                        SERVER_CHECK_DELAY = SERVER_CHECK_DELAY_MAX;    
+                        SERVER_CHECK_DELAY = SERVER_CHECK_DELAY_MAX;
                     }
                 }
             });
