@@ -74,6 +74,11 @@ class Item(db.Document):
         """
         return self.word_count() >= WORD_GOAL
 
+    def writing_time(self):
+        """ Returns total writing time based on start and last update
+        """
+        return self.last_update - self.start_time
+
     def validate_json(self, inputJSON):
         """ Validates & cleans json from API before save
             Returns cleaned up JSON

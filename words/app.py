@@ -103,8 +103,10 @@ def configure_template_filters(app):
 
     @app.template_filter()
     def markdown(value):
-        value = value.replace('<br>','\n') # TODO: this is happening because of bleach. See writr.model
-        return mistune.markdown(value)
+        if value:
+            value = value.replace('<br>','\n') # TODO: this is happening because of bleach. See writr.model
+            return mistune.markdown(value)
+        return ''
 
 
 def configure_logging(app):

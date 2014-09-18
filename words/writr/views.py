@@ -31,6 +31,10 @@ class ItemView(FlaskView):
 
     def before_request(self, name, *args , **kwargs):
         g.today = date.today()
+        g.reached_goal = False
+        g.last_item = Item.objects(user_ref=current_user.id).first()
+        if g.last_item.is_today() and g.last_item.reached_goal():
+            g.reached_goal = True
 
     @route('/', endpoint='dash')
     def index(self):
@@ -42,37 +46,45 @@ class ItemView(FlaskView):
             - Big link to write today.
         """
         items = Item.objects(user_ref=current_user.id)
+        
+        g.streak = 0
+        for item in items:
+            if item.reached_goal():
+                g.streak += 1
+                continue
+            break
+
         return render_template('writr/index.html', items=items)
 
     @route('/write/', endpoint='write')
-    @route('/<item_date>/', endpoint='item')
-    def get(self, item_date=None):
+    @route('/<date>/', endpoint='item')
+    def get(self, date=None):
         """ Writing View
             Returns single item to write/view
 
             Show current item (today) and make editable
             Or show old item, not editable
         """
-        if item_date:
+        if date:
             try:
-                item_date = datetime.strptime(item_date, '%d-%b-%Y')
+                date = datetime.strptime(date, '%d-%b-%Y')
             except:
                 flash('Please enter a date in the proper format')
-                return redirect(url_for('dash'))
+                return redirect(url_for('.dash'))
         else:
-            item_date = g.today
+            date = g.today
 
         item = Item.objects(
-                user_ref=current_user.id, date=item_date).first()
+                user_ref=current_user.id, date=date).first()
 
         if item is None:
-            if item_date == g.today:
+            if date == g.today:
                 # Create a new item for today
                 item = Item(user_ref=current_user.id, date=date.today())
                 item.save()
             else:
                 flash('No item found for date: %s' %
-                        item_date.strftime('%d-%b-%Y'))
+                        date.strftime('%d-%b-%Y'))
                 return redirect(url_for('.write'))
         return render_template('writr/item.html', item=item, is_today=item.is_today())
 

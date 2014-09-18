@@ -3,7 +3,20 @@
 {%- block content -%}
 <h3>Writr Dashboard</h3>
 <a href="{{url_for('.write')}}">Write Today</a>
-<img src="{{current_user.avatar(96)}}"/>
+<img src="{{current_user.avatar(64)}}"/>
+{{g.streak}}
+
+{% for item in items%}
+{% if item.content %}
+<div class="item" data-id="{{item.id}}">
+    {{item.reached_goal()}}
+    {%set date = item.date|format_date('%d-%b-%Y')%}
+    <a href="{{url_for('.item', date=date)}}">{{item.date|format_date('%d %b %Y')}}</a>
+    {{item.word_count()}}
+    {{item.writing_time()}}
+</div>
+{% endif %}
+{% endfor %}
 {%- endblock -%}
 
 {%- block footer_js %}
