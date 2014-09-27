@@ -30,6 +30,7 @@ class ItemView(FlaskView):
     decorators = [login_required]
 
     def before_request(self, name, *args , **kwargs):
+        print ('writr request')
         if current_user.is_authenticated():
             g.today = date.today()
             g.reached_goal = False

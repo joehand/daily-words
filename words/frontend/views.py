@@ -27,6 +27,7 @@ class Frontend(FlaskView):
     def index(self):
         """ Index page for non-authenticated users
         """
+        print ('index request')
         return render_template('frontend/index.html')
 
 Frontend.register(frontend)

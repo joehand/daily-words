@@ -50,6 +50,8 @@ def create_app(config=None, app_name=None, blueprints=None):
     configure_template_filters(app)
     configure_error_handlers(app)
 
+    print ('app created')
+
     return app
 
 def configure_app(app, config=None):
@@ -70,6 +72,8 @@ def configure_app(app, config=None):
             app.config.from_object(LocalConfig)
         except:
             app.config.from_object(DevelopmentConfig)
+            
+    print ('app configured')
 
 def configure_extensions(app):
     # flask-mongoengine
