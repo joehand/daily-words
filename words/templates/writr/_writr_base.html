@@ -1,0 +1,30 @@
+{% extends "_base.html" %}
+
+{% set navigation_bar = [
+    ('.dash', 'Dashboard'),
+    ('.write', 'Write'),
+] -%}
+
+{%- block siteheader %}
+<div class="site-header pure-menu pure-menu-open pure-menu-horizontal">
+    <span class="pure-menu-heading">Daily Words</span>
+    <ul>
+        {% for route, title in navigation_bar %}
+           {% set url = url_for(route) -%}
+            <li{% if request.path == url %} class="pure-menu-selected"{% endif
+            %}><a href="{{url}}">{{ title }}</a>
+            </li>
+        {% endfor %}
+    </ul>
+    <ul class="float-right">
+        <li><img src="{{current_user.avatar(36)}}"/></li>
+        <li><a href="{{url_for('security.logout')}}">Logout</a></li>
+    </ul>
+</div>
+{%- endblock siteheader -%}
+
+{% block sitefooter %}
+{%- endblock sitefooter %}
+
+{%- block footer_js %}
+{%- endblock footer_js %}
