@@ -59,12 +59,17 @@ class Item(db.Document):
             return len(words)
         return 0
 
+    def item_date(self):
+        """ Shortcut to a date object (instead of datetime)
+        """
+        return self.date.date()
+
     def is_today(self):
         """ Check if this model is today's model
             Returns True if is today
         """
         try:
-            return self.date.date() == date.today() # this may fail if item was just created, why?
+            return self.item_date() == date.today() # TODO: this may fail if item was just created, why?
         except:
             return self.date == date.today()
 

@@ -9,7 +9,7 @@
     :license:
 """
 
-from datetime import date, datetime
+from datetime import date, datetime, timedelta
 import json
 
 from flask import (Blueprint, current_app, flash, g, jsonify,
@@ -46,13 +46,17 @@ class ItemView(FlaskView):
             - Big link to write today.
         """
         items = Item.objects(user_ref=current_user.id)
-        
+
         g.streak = 0
-        for item in items:
-            if item.reached_goal():
-                g.streak += 1
-                continue
-            break
+        if (g.today - items.first().item_date()) > timedelta(days=1):
+            # if last item is over 1 day old we broke the streak =(
+            pass
+        else:
+            for item in items:
+                if item.reached_goal():
+                    g.streak += 1
+                    continue
+                break
 
         return render_template('writr/index.html', items=items)
 

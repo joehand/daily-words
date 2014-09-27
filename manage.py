@@ -60,7 +60,7 @@ def routes():
         line = urllib.unquote("{:50s} {:20s} {}".format(rule.endpoint, methods, url))
         output.append(line)
     for line in sorted(output):
-        print line
+        print (line)
 
 def shell_context():
     return dict(app=app)
