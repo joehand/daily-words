@@ -11,7 +11,7 @@
 
 import os
 
-from flask import Flask, render_template
+from flask import Flask, render_template, send_from_directory
 from flask_security import MongoEngineUserDatastore
 
 import mistune
@@ -49,6 +49,7 @@ def create_app(config=None, app_name=None, blueprints=None):
     configure_logging(app)
     configure_template_filters(app)
     configure_error_handlers(app)
+    configure_favicon(app)
 
     print ('app created')
 
@@ -72,7 +73,7 @@ def configure_app(app, config=None):
             app.config.from_object(LocalConfig)
         except:
             app.config.from_object(DevelopmentConfig)
-            
+
     print ('app configured')
 
 def configure_extensions(app):
@@ -150,3 +151,10 @@ def configure_error_handlers(app):
     @app.errorhandler(500)
     def server_error_page(error):
         return render_template('errors/500.html'), 500
+
+def configure_favicon(app):
+
+    @app.route('/favicon.ico')
+    def favicon():
+        return send_from_directory(os.path.join(app.root_path, 'static'),
+                               'favicon.ico', mimetype='image/vnd.microsoft.icon')
