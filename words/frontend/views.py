@@ -15,13 +15,13 @@ from flask import (Blueprint, current_app, flash, g, jsonify,
 from flask_classy import FlaskView, route
 
 
-frontend = Blueprint('frontend', __name__, url_prefix='/')
+frontend = Blueprint('frontend', __name__, url_prefix='/hello')
 
 class Frontend(FlaskView):
     """ Frontend View Class
     """
 
-    route_base = '/hello'
+    route_base = '/'
 
     @route('/', endpoint='index')
     def index(self):

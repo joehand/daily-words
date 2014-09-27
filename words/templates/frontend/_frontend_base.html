@@ -1,9 +1,20 @@
 {% extends "_base.html" %}
 {% import "macros/_css.html" as css %}
-    {%- block css -%}
-    {%- endblock -%}
+
+{% block css -%}{{ css.render_css('frontend') }}{%- endblock %}
+
 
     {%- block siteheader %}
+    <div class="header">
+        <div class="home-menu pure-menu pure-menu-open pure-menu-horizontal pure-menu-fixed">
+            <a class="pure-menu-heading" href="">Daily Words</a>
+            <ul>
+                <li class="pure-menu-selected"><a href="{{url_for('frontend.index')}}">Home</a></li>
+                <li><a href="#">Tour</a></li>
+                <li><a href="{{url_for('security.login')}}">Login</a></li>
+            </ul>
+        </div>
+    </div>
     {%- endblock siteheader -%}
 
     {% block sitefooter %}

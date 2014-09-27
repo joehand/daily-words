@@ -30,11 +30,15 @@ class ItemView(FlaskView):
     decorators = [login_required]
 
     def before_request(self, name, *args , **kwargs):
-        g.today = date.today()
-        g.reached_goal = False
-        g.last_item = Item.objects(user_ref=current_user.id).first()
-        if g.last_item.is_today() and g.last_item.reached_goal():
-            g.reached_goal = True
+        if current_user.is_authenticated():
+            g.today = date.today()
+            g.reached_goal = False
+            g.last_item = Item.objects(user_ref=current_user.id).first()
+            if g.last_item.is_today() and g.last_item.reached_goal():
+                g.reached_goal = True
+        else:
+            print ('here')
+            return redirect(url_for('frontend.index'))
 
     @route('/', endpoint='dash')
     def index(self):

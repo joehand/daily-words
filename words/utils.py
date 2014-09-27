@@ -149,6 +149,21 @@ def validate_date(date):
     except ValueError:
         raise ValueError('Incorrect data format')
 
+def prettytimedelta(d):
+    s = d.seconds
+    if s <= 60:
+        return '{} secs'.format(s)
+    elif s < 3600:
+        mins = s/60
+        if mins == 1:
+            return '{} mins'.format(mins)
+        return '{} mins'.format(mins)
+    else:
+        hrs = s/3600
+        if hrs == 1:
+            return '{} hr'.format(hrs)
+        return '{} hrs'.format(hrs)
+
 def prettydate(d):
     diff = datetime.utcnow() - d
     s = diff.seconds

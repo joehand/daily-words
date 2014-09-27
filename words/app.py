@@ -22,7 +22,7 @@ from .writr import writr
 
 from .config import Config, DevelopmentConfig, ProductionConfig
 from .extensions import db, security, assets
-from .utils import prettydate
+from .utils import prettydate, prettytimedelta
 
 # For import *
 __all__ = ['create_app']
@@ -100,6 +100,10 @@ def configure_template_filters(app):
     @app.template_filter()
     def time_ago(value):
         return prettydate(value)
+
+    @app.template_filter()
+    def time_delta(value):
+        return prettytimedelta(value)
 
     @app.template_filter()
     def markdown(value):
