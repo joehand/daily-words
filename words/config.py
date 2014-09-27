@@ -46,7 +46,7 @@ class ProductionConfig(Config):
 
     # Flask Assets Config
     ASSETS_AUTO_BUILD = False
-    FLASK_ASSETS_USE_S3 = True
+    FLASK_ASSETS_USE_S3 = False
 
     #MongoDB Config
     MONGODB_DB = os.environ.get('MONGODB_DATABASE')
