@@ -75,6 +75,7 @@ class ItemView(FlaskView):
             Show current item (today) and make editable
             Or show old item, not editable
         """
+        print(date)
         if date:
             try:
                 date = datetime.strptime(date, '%d-%b-%Y')
