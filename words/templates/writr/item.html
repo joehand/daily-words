@@ -6,15 +6,21 @@
 
 {% block body_class %}writr-item{% endblock %}
 
+{%- block siteheader %}
+<div class="site-header pure-menu pure-menu-open pure-menu-horizontal">
+    <a class="pure-menu-heading" href="{{url_for('.dash')}}">Home</a>
+</div>
+{%- endblock siteheader -%}
+
 {%- block content -%}
 <div class='app-offline'></div>
 <div id="writr-item" data-id="{{item.id}}" class="pure-g">
     <div class="pure-u-5-24">
-        <div class="item-date">
-            {{item.date|format_date}}
-        </div>
     </div>
     <div class="pure-u-14-24">
+        <h2 class="item-date">
+            {{item.date|format_date}}
+        </h2>
         {% if is_today %}
         <div class="item-content writr-edit" autofocus="true" contenteditable="true">
             {%- if item.content -%}
@@ -29,12 +35,10 @@
     </div>
     <div class="pure-u-5-24">
         <div class="item-stats">
-            <div class="item-words">
-                <span class="item-word-count">{{item.word_count()}}</span> Words
-            </div>
-            {% if is_today %}
-            <div class="item-dirty"></div>
-            {% endif %}
+            <span class="item-words"><span class="item-word-count">{{item.word_count()}}</span> Words</span>
+            {%- if is_today -%}
+            &middot;<span class="item-dirty" title="Content Saves Automatically">Saved</span>
+            {%- endif -%}
         </div>
     </div>
 </div>

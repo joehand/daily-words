@@ -1,5 +1,10 @@
 @import 'framework.less';         // Get all the framework
 
+body {
+    font-family: 'Open Sans', sans-serif;
+    background-color:@gray-lightest;
+}
+
 .site-header {
     padding:0.5em 0;
 
@@ -13,7 +18,7 @@
 }
 
 .page-content {
-    padding:1em 3em;
+    padding:40px 0;
 }
 
 /* =======
@@ -25,10 +30,10 @@ body.writr-dash {
     .streak {
         padding:5px 0;
         font-variant:small-caps;
+        font-family: 'Alegreya Sans SC', sans-serif;
     }
     .item-stream {
         .item {
-            font-variant:small-caps;
             margin:0 0 2.0em;
             padding-left:15px;
             position:relative;
@@ -70,6 +75,11 @@ body.writr-dash {
                 }
             }
 
+            .date, .words, .duration {
+                font-variant:small-caps;
+                font-family: 'Alegreya Sans SC', sans-serif;
+            }
+
             .words {
                 text-align:center;
             }
@@ -88,18 +98,19 @@ body.writr-dash {
 
    ======= */
 body.writr-item { // All Single Item Pages (editable or not)
+    //padding:2em 0;
 
     .site-header {
         position:fixed;
         opacity:0;
-        margin-top:-30px;
+        top:0;
+
         &:hover {
             opacity:1;
-            margin-top:0px;
         }
 
-        -webkit-transition: all 0.5s ease-out;
-                transition: all 0.5s ease-out;
+        -webkit-transition: all 0.5s ease-in;
+                transition: all 0.5s ease-in;
     }
 
     .app-offline {
@@ -122,23 +133,35 @@ body.writr-item { // All Single Item Pages (editable or not)
 
     .item-stats {
         text-align:right;
-        font-variant:small-caps;
-        right:1em;
+        right:2em;
         position:fixed;
+        bottom:1em;
+        font-size:20px;
     }
 
-    .item-date {
-        font-variant:small-caps;
-        left:1em;
-        position:fixed;
+    .item-words, .item-dirty{
+        display:inline;
+        margin:0;
+        padding:0 5px;
     }
-
-
 
     .item-dirty {
         &.dirty {
-            color:red;
+            color:#CF4647;
         }
+        -webkit-transition: all 0.5s ease-out;
+                transition: all 0.5s ease-out;
+    }
+
+    .item-date, .item-stats {
+        font-variant:small-caps;
+        font-family: 'Alegreya Sans SC', sans-serif;
+    }
+
+    .writr-edit {
+        font-family: 'PT Sans', sans-serif;
+        font-size:22px;
+        line-height:1.5em;
     }
 
 }
