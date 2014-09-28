@@ -1,0 +1,9 @@
+{%- assets filters="jsmin", depends=('**/*.js'),
+     output="build/app.%(version)s.min.js",
+     "build/config.js", "build/main.js" -%}
+  {%if config.PRODUCTION-%}
+  <script data-main="{{ ASSET_URL }}" src="{{ url_for('static', filename='build/require.js')}}"></script>
+  {%- else -%}
+  <script data-main="{{ url_for('static', filename='js/config')}}" src="{{ url_for('static', filename='ext/requirejs/require.js')}}"></script>
+  {%- endif -%}
+{%- endassets -%}

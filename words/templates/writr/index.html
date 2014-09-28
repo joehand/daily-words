@@ -10,6 +10,12 @@
         </div>
     </div>
     <div class="item-stream pure-u-14-24">
+        {%- if not items[0].is_today() -%}
+        <div class="item write-today">
+            <a href="{{url_for('.write')}}"> Write Today
+            </a>
+        </div>
+        {%- endif -%}
         {%- for item in items -%}
         {%- if item.content -%}
         <div class="item {% if item.reached_goal() %}completed{%endif-%}
@@ -51,5 +57,5 @@
         {{ config.PROJECT }}.apiURL = "{{url_for('writr.ItemAPI:index')}}";
         {{ config.PROJECT }}.childView = null;
     </script>
-    <script data-main="{{ url_for('static', filename='js/config')}}" src="{{ url_for('static', filename='ext/requirejs/require.js')}}"></script>
+    {% include 'partials/_requirejs.html' %}
 {%- endblock footer_js %}

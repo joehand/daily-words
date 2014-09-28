@@ -54,5 +54,5 @@
         {{ config.PROJECT }}.apiURL = "{{url_for('writr.ItemAPI:index')}}";
         {{ config.PROJECT }}.childView = "item";
     </script>
-    <script data-main="{{ url_for('static', filename='js/config')}}" src="{{ url_for('static', filename='ext/requirejs/require.js')}}"></script>
+    {% include 'partials/_requirejs.html' %}
 {%- endblock footer_js %}
