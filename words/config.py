@@ -42,7 +42,7 @@ class Config(object):
 3
 class ProductionConfig(Config):
 
-    DEBUG = True
+    DEBUG = False
     PRODUCTION = True
 
     SECRET_KEY = os.environ.get('SECRET_KEY')
