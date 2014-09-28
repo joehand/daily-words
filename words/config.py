@@ -32,8 +32,14 @@ class Config(object):
     SECURITY_PASSWORD_SALT = '/2aX16zPnnIgfMwkOjGX4S'
 
     # Flask Assets Config
-    #ASSETS_MANIFEST = 'file:%s' % 'webcache'
+    ASSETS_MANIFEST = 'file:%s' % 'webcache'
 
+    # Flask S3 Config
+    S3_BUCKET_NAME = 'joehand_words'
+    #S3_CDN_DOMAIN = 'd2myfrzehu84qm.cloudfront.net'
+    S3_HEADERS = {'Cache-Control': str('public, max-age=15552000')}
+    S3_ONLY_MODIFIED = True
+3
 class ProductionConfig(Config):
 
     DEBUG = True
@@ -46,7 +52,7 @@ class ProductionConfig(Config):
 
     # Flask Assets Config
     ASSETS_AUTO_BUILD = False
-    FLASK_ASSETS_USE_S3 = False
+    FLASK_ASSETS_USE_S3 = True
 
     #MongoDB Config
     MONGODB_DB = os.environ.get('MONGODB_DATABASE')

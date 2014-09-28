@@ -14,5 +14,8 @@ assets = Environment()
 from flask_mongoengine import MongoEngine
 db = MongoEngine()
 
+from flask_s3 import FlaskS3
+s3 = FlaskS3()
+
 from flask_security import Security
 security = Security()

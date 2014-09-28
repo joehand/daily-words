@@ -21,7 +21,7 @@ from .user import user, User, Role
 from .writr import writr
 
 from .config import Config, DevelopmentConfig, ProductionConfig
-from .extensions import db, security, assets
+from .extensions import assets, db, s3, security
 from .utils import prettydate, prettytimedelta
 
 # For import *
@@ -73,15 +73,18 @@ def configure_app(app, config=None):
             app.config.from_object(DevelopmentConfig)
 
 def configure_extensions(app):
+    # flask-assets
+    assets.init_app(app)
+
     # flask-mongoengine
     db.init_app(app)
+
+    # flask-s3
+    s3.init_app(app)
 
     # flask-security
     user_datastore = MongoEngineUserDatastore(db, User, Role)
     security.init_app(app, user_datastore)
-
-    # flask-assets
-    assets.init_app(app)
 
 def configure_blueprints(app, blueprints):
     """ Configure blueprints from list above or arg."""

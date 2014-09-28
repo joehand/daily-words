@@ -1,5 +1,6 @@
 # manage.py
 import os
+import logging
 
 from flask import url_for
 
@@ -8,6 +9,8 @@ from flask_s3 import create_all
 from flask_script import Manager, Shell, Server
 from flask_security import MongoEngineUserDatastore
 from flask_security.utils import encrypt_password
+
+from webassets.script import CommandLineEnvironment
 
 from tests import testjs
 
@@ -29,6 +32,33 @@ def jasmine():
         Default URL = http://0.0.0.0:5000/
     """
     testjs.run_server()
+
+
+def _clear_asset_cache():
+    print ('clearing asset cache')
+    ManageAssets(assets, 'clean')
+
+def _build_assets():
+    print ('building assets')
+    ManageAssets(assets, '--parse-templates build')
+
+def _build_js():
+    print ('grunting js')
+    os.system('grunt build')
+
+@manager.command
+def upload():
+    print 'starting file upload to Amazon S3'
+    create_all(app)
+    #TODO : erase old css files on s3
+    print 'done with file upload'
+
+@manager.command
+def deploy_assets():
+    _clear_asset_cache()
+    _build_js() # This needs to go first before build assets
+    _build_assets()
+    #upload()
 
 
 @manager.command
@@ -68,4 +98,5 @@ def shell_context():
 #runs the app
 if __name__ == '__main__':
     manager.add_command('shell', Shell(make_context=shell_context))
+    manager.add_command('assets', ManageAssets(assets_env=assets))
     manager.run()
