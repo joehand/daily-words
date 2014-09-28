@@ -39,7 +39,7 @@ class Config(object):
     S3_CDN_DOMAIN = 'd2hqsc0ciw0ikl.cloudfront.net'
     S3_HEADERS = {'Cache-Control': str('public, max-age=15552000')}
     S3_ONLY_MODIFIED = True
-3
+
 class ProductionConfig(Config):
 
     DEBUG = False
