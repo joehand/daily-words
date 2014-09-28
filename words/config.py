@@ -36,7 +36,7 @@ class Config(object):
 
     # Flask S3 Config
     S3_BUCKET_NAME = 'joehand_words'
-    #S3_CDN_DOMAIN = 'd2myfrzehu84qm.cloudfront.net'
+    S3_CDN_DOMAIN = 'd2hqsc0ciw0ikl.cloudfront.net'
     S3_HEADERS = {'Cache-Control': str('public, max-age=15552000')}
     S3_ONLY_MODIFIED = True
 3
