@@ -1,6 +1,7 @@
 ###Python###
 
 venv
+myenv
 
 *.py[cod]
 
@@ -58,3 +59,5 @@ node_modules/*
 ###Local Config###
 */local.py
 words/local.py
+
+TODOs.md

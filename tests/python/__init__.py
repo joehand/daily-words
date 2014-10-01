@@ -8,7 +8,11 @@
     thanks to https://github.com/mattupstate/overholt for the framework
 """
 
-from flask.testing import FlaskClient
+import sys
+import os
+sys.path.insert(0, os.path.abspath('..'))
+
+from flask_testing import FlaskClient
 
 from flask_fillin import FormWrapper
 from flask_testing import TestCase

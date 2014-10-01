@@ -36,7 +36,7 @@ describe("Item Model :: ", function() {
                 .toEqual(1);
             expect(this.item.get('typing_speed')[0]['word_delta'])
                 .toEqual(3)
-            expect(this.item.get('typing_speed')[0]['time_delta']/100)
+            expect(this.item.get('typing_speed')[0]['time_delta']/1000)
                 .toBeCloseTo(0, 0)
         });
 

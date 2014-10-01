@@ -32,7 +32,10 @@ define([
                     }
                 }
             },
-            '.item-word-count' : 'word_count',
+            '.item-word-count' : {
+                observe: 'word_count',
+                updateView: true,
+            }
         },
 
         events: {

@@ -48,13 +48,13 @@ def _build_js():
 
 @manager.command
 def upload():
-    print 'starting file upload to Amazon S3'
+    print ('starting file upload to Amazon S3')
     create_all(app)
     #TODO : erase old css files on s3
-    print 'done with file upload'
+    print ('done with file upload')
 
 @manager.command
-def deploy_assets():
+def build():
     _clear_asset_cache()
     _build_js() # This needs to go first before build assets
     _build_assets()

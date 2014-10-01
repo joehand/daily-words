@@ -10,7 +10,7 @@
         </div>
     </div>
     <div class="item-stream pure-u-14-24">
-        {%- if not items[0].is_today() -%}
+        {%- if items and not items.first().is_today() -%}
         <div class="item write-today">
             <a href="{{url_for('.write')}}"> Write Today
             </a>

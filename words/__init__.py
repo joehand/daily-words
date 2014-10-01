@@ -9,4 +9,4 @@
     :license:
 """
 
-from app import *
+from .app import *

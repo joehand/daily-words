@@ -11,6 +11,7 @@
 
 from datetime import date, datetime, timedelta
 import json
+import sys
 
 from flask import (Blueprint, current_app, flash, g, jsonify,
                     redirect, render_template, request, url_for)
@@ -76,7 +77,7 @@ class ItemView(FlaskView):
         """
         if date:
             try:
-                date = datetime.strptime(date, '%d-%b-%Y')
+                date = datetime.strptime(date, '%d-%b-%Y').date()
             except:
                 flash('Please enter a date in the proper format')
                 return redirect(url_for('.dash'))
@@ -124,13 +125,14 @@ class ItemAPI(FlaskView):
         """
         try:
             item = Item.objects(id=id).first()
-            item = item.validate_json(json.loads(request.data))
+            item = item.validate_json(json.loads(request.data.decode()))
             item.save()
             return jsonify(item.to_dict())
         except:
-            print 'Unexpected error:', sys.exc_info()[0]
+            error = 'Unexpected error: {}'.format(sys.exc_info()[0])
+            print (error)
             # TODO Make these more helpful
-            return jsonify(status='error', error=''), 400
+            return jsonify(status='error', error=error), 400
 
 
 #Register our View Classes on the blueprint

@@ -25,14 +25,18 @@ class ItemUrlTestCase(WritrTestCase):
         self.assertOk(r)
         self.assertIn(date.today().strftime('%d %b %Y'), r.data)
 
+    def test_item_old(self):
+        OLD_DATE = date(2008,01,01)
+        self.item_old = ItemFactory(user_ref=self.user.id, date=OLD_DATE)
+        r = self.get(url_for('writr.item', date=OLD_DATE.strftime('%d-%b-%Y')))
+        self.assertOk(r)
+        self.assertIn('01 Jan 2008', r.data)
+
     def test_item_nonexistent(self):
-        r = self.get(url_for('writr.item', item_date='01-Jan-2008'))
+        item = Item.objects().first()
+        url = url_for('writr.item', date=item.date.strftime('%d-%b-%Y'))
+        url = url.replace(item.date.strftime('%Y'), '2013')
+        r = self.get(url)
         self.assertOk(r)
         self.assertIn('No item found for date', r.data)
         self.assertIn(date.today().strftime('%d %b %Y'), r.data)
-
-    def test_item_old(self):
-        self.item_old = ItemFactory(user_ref=self.user.id, date=date(2008,01,01))
-        r = self.get(url_for('writr.item', item_date='01-Jan-2008'))
-        self.assertOk(r)
-        self.assertIn('01 Jan 2008', r.data)

@@ -32,7 +32,7 @@ class UrlTestCase(FrontendTestCase):
     def test_login_flow(self):
         r = self._login()
         self.assertOk(r)
-        self.assertIn('Logged In', r.data)
+        self.assertIn('Logout', r.data)
 
     def test_logout(self):
         r = self.get('/logout', follow_redirects=True)

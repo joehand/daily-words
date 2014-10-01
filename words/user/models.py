@@ -35,8 +35,8 @@ class User(db.DynamicDocument, UserMixin):
     def avatar(self, size):
         if self.email is None:
             self.email = ''
-        return ('http://www.gravatar.com/avatar/'
-                + md5(self.email).hexdigest() + '?d=mm&s=' + str(size))
+        return ('http://www.gravatar.com/avatar/{}?d=mm&s={}'.format(
+                md5(self.email.encode('utf-8')).hexdigest(), str(size)))
 
     def to_dict(self):
         return mongo_to_dict(self)
