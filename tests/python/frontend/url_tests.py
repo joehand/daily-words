@@ -15,40 +15,40 @@ class UrlTestCase(FrontendTestCase):
         self._login()
         r = self.get('/')
         self.assertOk(r)
-        self.assertIn('Logout', r.data)
+        self.assertIn('Logout', r.data.decode())
 
     def test_unauthenticated_index(self):
         self._logout()
         r = self.get('/')
         self.assertOk(r)
-        self.assertNotIn('Logout', r.data)
+        self.assertNotIn('Logout', r.data.decode())
 
     def test_login_page(self):
         self._logout()
         r = self.get('/login')
         self.assertOk(r)
-        self.assertIn('Login', r.data)
+        self.assertIn('Login', r.data.decode())
 
     def test_login_flow(self):
         r = self._login()
         self.assertOk(r)
-        self.assertIn('Logout', r.data)
+        self.assertIn('Logout', r.data.decode())
 
     def test_logout(self):
         r = self.get('/logout', follow_redirects=True)
         self.assertOk(r)
-        self.assertIn('Login', r.data)
+        self.assertIn('Login', r.data.decode())
         r = self.get('/')
         self.assertOk(r)
-        self.assertNotIn('Logout', r.data)
+        self.assertNotIn('Logout', r.data.decode())
 
     def test_incorrect_login(self):
         self._logout()
         r = self._login(email='asdf')
         self.assertOk(r)
-        self.assertIn('Specified user does not exist', r.data)
-        self.assertNotIn('Logout', r.data)
+        self.assertIn('Specified user does not exist', r.data.decode())
+        self.assertNotIn('Logout', r.data.decode())
         r = self._login(password='asdf')
         self.assertOk(r)
-        self.assertIn('Invalid password', r.data)
-        self.assertNotIn('Logout', r.data)
+        self.assertIn('Invalid password', r.data.decode())
+        self.assertNotIn('Logout', r.data.decode())

@@ -22,7 +22,7 @@ class ItemAPITestCase(WritrTestCase):
     def test_item_get_single(self):
         r = self.jget(url_for('writr.ItemAPI:get', id=self.item.id))
         self.assertOkJson(r)
-        self.assertIn(str(self.item.id), r.data)
+        self.assertIn(str(self.item.id), r.data.decode())
 
     def test_item_get_all(self):
         for i in range(1,10):
@@ -30,8 +30,8 @@ class ItemAPITestCase(WritrTestCase):
 
         r = self.jget(url_for('writr.ItemAPI:index'))
         self.assertOkJson(r)
-        self.assertIn(str(self.item.id), r.data)
-        items = json.loads(r.data)['items']
+        self.assertIn(str(self.item.id), r.data.decode())
+        items = json.loads(r.data.decode())['items']
         self.assertEquals(len(items), 10)
 
     def test_item_update(self):
@@ -40,4 +40,4 @@ class ItemAPITestCase(WritrTestCase):
                 'content': 'updated content'
             })
         self.assertOkJson(r)
-        self.assertIn('"content": "updated content"', r.data)
+        self.assertIn('"content": "updated content"', r.data.decode())
