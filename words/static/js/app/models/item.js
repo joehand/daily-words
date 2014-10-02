@@ -9,7 +9,9 @@ define([
     'underscore'
 ], function (Backbone, _) {
 
-    var SAVE_DELAY = 2500;
+    var SAVE_DELAY = 1500,
+        FORCE_SAVE_TIME = 5000,//Force a save after this duration regardless of typing
+        FORCE_SAVE_CHARS = 100; //Force a save after this content change regardless of typing
 
     var Item = Backbone.Model.extend({
 
@@ -45,6 +47,22 @@ define([
             this.updateTime();
 
             this.checkSave();
+
+            var last_save = this.get('last_save');
+            if (!_.isUndefined(last_save)){
+                var time_diff = new Date().getTime() - last_save['time'],
+                    char_diff =  Math.abs(this.get('content').length - last_save['length']);
+                if (time_diff > FORCE_SAVE_TIME || char_diff > FORCE_SAVE_CHARS) {
+                    //console.log('doing force save');
+                    this.doSave();
+                }
+            } else {
+                last_save = {
+                    'time':new Date().getTime(),
+                    'length':this.get('content').length
+                }
+                this.set('last_save', last_save);
+            }
         },
 
         checkSave: _.debounce(function() {
@@ -56,7 +74,7 @@ define([
             }
         }, SAVE_DELAY),
 
-        doSave: function() {
+        doSave: _.throttle(function() {
             /*Saves model to server after updating words typed array
             */
             this.updateWordsTyped(true);
@@ -69,6 +87,11 @@ define([
                         console.info('Data saved locally');
                     } else {
                         // saved remotely
+                        last_save = {
+                            'time':new Date().getTime(),
+                            'length':model.get('content').length
+                        }
+                        model.set('last_save', last_save);
                         console.log('server save success');
                     }
                 },
@@ -77,7 +100,7 @@ define([
                     console.error('server error');
                 }
             });
-        },
+        }, 100),
 
         setWordCount: function() {
             var regex = /\s+/gi,

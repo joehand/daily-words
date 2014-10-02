@@ -23,13 +23,17 @@ define([
             '.item-dirty' : {
                 observe: 'dirty',
                 update: function($el, val, model, options) {
-                    if (model.get('dirty') === true) {
-                        $el.addClass('dirty');
-                        $el.text('Unsaved');
-                    } else {
-                        $el.removeClass('dirty');
-                        $el.text('Saved');
-                    }
+                    // debounce so we don't flash saved/unsaved
+                    var update = _.debounce(function(){
+                        if (model.get('dirty') === true) {
+                            $el.addClass('dirty');
+                            $el.text('Unsaved');
+                        } else {
+                            $el.removeClass('dirty');
+                            $el.text('Saved');
+                        }
+                    }, 100);
+                    update();
                 }
             },
             '.item-word-count' : {
@@ -75,7 +79,7 @@ define([
         },
 
         contentChanged: function() {
-            console.log('model changed');
+            //console.log('model changed');
         },
 
         forceSave: function() {

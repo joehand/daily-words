@@ -69,7 +69,7 @@ define([
         },
 
         setDirty: function(model, val, opts) {
-            console.log('dirty collection');
+            //console.log('dirty collection');
             this.model.set('dirty', model.get('dirty'))
         },
 
@@ -79,7 +79,7 @@ define([
         },
 
         collectionSync: function() {
-            console.log('sync collection');
+            //console.log('sync collection');
         },
 
         checkServer: function() {
