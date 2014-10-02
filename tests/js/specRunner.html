@@ -1,0 +1,23 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Jasmine Spec Runner</title>
+  <link rel="stylesheet" href="static/ext/jasmine/lib/jasmine-core/jasmine.css">
+</head>
+<body>
+  <div id="sandbox" style="overflow:hidden; height:1px;"></div>
+  <script src="static/ext/jasmine/lib/jasmine-core/jasmine.js"></script>
+  <script src="static/ext/jasmine/lib/jasmine-core/jasmine-html.js"></script>
+  <script src="static/ext/jasmine/lib/jasmine-core/boot.js"></script>
+  <script src="static/ext/sinonjs/sinon.js"></script>
+  <script src="static/ext/jasmine-sinon/lib/jasmine-sinon.js"></script>
+  <script data-main="{{ url_for('custom_static', filename='config') }}" src="static/ext/requirejs/require.js"></script>
+
+  <script>
+    if (typeof window.callPhantom === "function") {
+	  window.callPhantom("parse time");
+    }
+  </script>
+</body>
+</html>
