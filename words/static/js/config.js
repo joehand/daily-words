@@ -1,5 +1,4 @@
 require.config({
-  //baseUrl: '/static/',
   deps: [
     'main'
   ],
@@ -12,14 +11,18 @@ require.config({
       exports: 'Backbone'
     },
     'backbone.stickit': {
-      deps: ['backbone']
+      deps: [
+        'backbone'
+      ]
     },
     'Backbone.dualStorage': {
-      deps: ['backbone']
+      deps: [
+        'backbone'
+      ]
     },
     underscore: {
       exports: '_'
-    }
+    },
   },
   paths: {
     models: 'app/models',
@@ -30,5 +33,8 @@ require.config({
     underscore: '../ext/underscore/underscore',
     'backbone.stickit': '../ext/backbone.stickit/backbone.stickit',
     'Backbone.dualStorage': '../ext/Backbone.dualStorage/Backbone.dualStorage',
-  }
+  },
+  packages: [
+
+  ]
 });

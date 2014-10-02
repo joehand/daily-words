@@ -33,6 +33,14 @@ def jasmine():
     """
     testjs.run_server()
 
+@manager.command
+def tests():
+    """ All teh tests!
+    """
+    print ("JS tests first")
+    os.system('grunt test')
+    print ("Now Python tests")
+    os.system('python `which nosetests`') # TODO: figure out real nosetest
 
 def _clear_asset_cache():
     print ('clearing asset cache')

@@ -2,6 +2,10 @@ module.exports = function(grunt) {
   var buildDir = '<%= pkg.name %>/static/build/',
       srcJSDir = '<%= pkg.name %>/static/js/';
 
+  // Load all grunt tasks except template-jasmine-requirejs which is required in
+  // the jasmine task below.
+  require('matchdep').filterDev('grunt-!(template-jasmine-requirejs)').forEach(grunt.loadNpmTasks);
+
   // Project configuration.
   grunt.initConfig({
     pkg: grunt.file.readJSON('package.json'),
@@ -53,18 +57,37 @@ module.exports = function(grunt) {
         }
       }
     },
-    clean: [buildDir]
+    clean: [buildDir],
+    connect: {
+        test : {
+            port : 8000
+        }
+    },
+    jasmine: {
+        test: {
+          src: 'static/**/*.js',
+          options: {
+            specs: 'tests/**/*.spec.js',
+            host: 'http://127.0.0.1:8000/',
+            //display:'short',
+            vendor: [
+              'words/static/ext/sinonjs/sinon.js',
+            ],
+            template: require('grunt-template-jasmine-requirejs'),
+            templateOptions: {
+              requireConfigFile: 'tests/js/config.js',
+              requireConfig: {
+                baseUrl: srcJSDir,
+                deps:[''] //overwrite specRunner dep
+              }
+            }
+          }
+        }
+    },
   });
 
-
-  grunt.loadNpmTasks('grunt-contrib-uglify');
-  grunt.loadNpmTasks('grunt-bower-requirejs');
-  grunt.loadNpmTasks('grunt-contrib-requirejs');
-  grunt.loadNpmTasks('grunt-bowercopy');
-  grunt.loadNpmTasks('grunt-contrib-clean');
-
-
-  // Default task(s).
+  // task(s).
+  grunt.registerTask('test', ['connect:test', 'jasmine:test']);
   grunt.registerTask('build', ['clean','requirejs', 'bowercopy', 'uglify']);
   grunt.registerTask('default', ['build']);
 
