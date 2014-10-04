@@ -86,7 +86,7 @@ class FlaskTestCaseMixin(object):
         :param response: The test client response object
         :param status_code: The expected status code
         """
-        self.assertEquals(status_code, response.status_code)
+        self.assertEqual(status_code, response.status_code)
         return response
 
     def assertOk(self, response):
@@ -123,7 +123,7 @@ class FlaskTestCaseMixin(object):
         :param response: The test client response object
         :param content_type: The expected content type
         """
-        self.assertEquals(content_type, response.headers['Content-Type'])
+        self.assertEqual(content_type, response.headers['Content-Type'])
         return response
 
     def assertOkHtml(self, response):
@@ -171,4 +171,4 @@ class FlaskTestCaseMixin(object):
         :param name: The cookie name
         :param value: The value of the cookie
         """
-        self.assertEquals(value, self.getCookies(response).get(name, None))
+        self.assertEqual(value, self.getCookies(response).get(name, None))

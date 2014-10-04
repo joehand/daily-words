@@ -67,7 +67,7 @@ def configure_app(app, config=None):
         app.config.from_object(config)
     else:
         try:
-            from local import LocalConfig
+            from .local import LocalConfig
             app.config.from_object(LocalConfig)
         except:
             app.config.from_object(DevelopmentConfig)

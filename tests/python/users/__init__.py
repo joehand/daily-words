@@ -22,14 +22,14 @@ class UserTestCase(AppTestCase):
 
     def test_user_created(self):
         user = User.objects()
-        self.assertEquals(len(user),1)
+        self.assertEqual(len(user),1)
 
     def test_roles(self):
         roles = Role.objects()
         role = roles.first()
-        self.assertEquals(len(roles),1)
-        self.assertEquals(role.name,'admin')
-        self.assertEquals(role.description,'Administrator')
+        self.assertEqual(len(roles),1)
+        self.assertEqual(role.name,'admin')
+        self.assertEqual(role.description,'Administrator')
 
     def test_user_page(self):
         r = self.get('/user')
@@ -37,4 +37,4 @@ class UserTestCase(AppTestCase):
 
     def test_user_avatar(self):
         #TODO!
-        self.assertEquals(True,False)
+        self.assertEqual(True,False)

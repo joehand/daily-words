@@ -9,7 +9,7 @@
     :license:
 """
 
-from datetime import datetime, date, timezone
+from datetime import datetime, date
 import json
 import re
 from functools import wraps
@@ -33,16 +33,16 @@ class Item(db.Document):
     user_ref = db.ReferenceField(User)
     content = db.StringField()
     date = db.DateTimeField(required=True, unique_with='user_ref',
-                                default=datetime.now(timezone.utc)
+                                default=datetime.now()
                                     .replace(tzinfo=pytz.utc)
                                     .replace(hour=0, minute=0, second=0, microsecond=0)
                             )
     start_time = db.DateTimeField(required=True,
-                                    default=datetime.now(timezone.utc)
+                                    default=datetime.now()
                                         .replace(tzinfo=pytz.utc)
                                 )
     last_update = db.DateTimeField(required=True,
-                                    default=datetime.now(timezone.utc)
+                                    default=datetime.now()
                                         .replace(tzinfo=pytz.utc)
                                 )
 
@@ -127,7 +127,7 @@ class Item(db.Document):
             Currently:
              - Updates last_update time to now
         """
-        self.last_update = datetime.now(timezone.utc).replace(tzinfo=pytz.utc)
+        self.last_update = datetime.now().replace(tzinfo=pytz.utc)
 
     def validate_json(self, inputJSON):
         """ Validates & cleans json from API before save
@@ -136,7 +136,7 @@ class Item(db.Document):
             Validations/Cleans:
              - Update datetime from JS to Python
         """
-        for key, val in inputJSON.items():
+        for key, val in list(inputJSON.items()):
             if key in ['last_update']:
                 try:
                     # divide by 1000 because JS timestamp is in ms
@@ -162,7 +162,7 @@ class Item(db.Document):
         """
         data = json.loads(self.to_json())
         data.pop('_cls', None)
-        for key, val in data.items():
+        for key, val in list(data.items()):
             if key == 'user_ref':
                 data[key] = str(self[key].id)
             elif key == '_id':

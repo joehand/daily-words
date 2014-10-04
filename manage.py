@@ -87,7 +87,7 @@ def initdb():
 def routes():
     """ Prints out all the routes to shell
     """
-    import urllib
+    import urllib.request, urllib.parse, urllib.error
     output = []
     for rule in app.url_map.iter_rules():
         options = {}
@@ -95,7 +95,7 @@ def routes():
             options[arg] = "[{0}]".format(arg)
         methods = ','.join(rule.methods)
         url = url_for(rule.endpoint, **options)
-        line = urllib.unquote("{:50s} {:20s} {}".format(rule.endpoint, methods, url))
+        line = urllib.parse.unquote("{:50s} {:20s} {}".format(rule.endpoint, methods, url))
         output.append(line)
     for line in sorted(output):
         print (line)

@@ -34,7 +34,7 @@ class ItemAPITestCase(WritrTestCase):
         self.assertOkJson(r)
         self.assertIn(str(self.item.id), r.data.decode())
         items = json.loads(r.data.decode())['items']
-        self.assertEquals(len(items), 10)
+        self.assertEqual(len(items), 10)
 
     def test_item_update(self):
         r = self.jput(url_for('writr.ItemAPI:put', id=self.item.id),

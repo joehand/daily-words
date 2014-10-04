@@ -6,7 +6,7 @@
     Test factories module
 """
 
-from datetime import datetime, date, timezone
+from datetime import datetime, date
 import random
 
 import pytz
@@ -32,7 +32,7 @@ class FuzzyWords(FuzzyText):
         chars = [random.choice(self.chars) for _i in range(self.length)]
         chars = self.prefix + ''.join(chars) + self.suffix
         chars = chars.replace(' ', '')
-        chars = ''.join(map(lambda x:x+' '*random.randint(0,1), chars)).strip()
+        chars = ''.join([x+' '*random.randint(0,1) for x in chars]).strip()
         return ' '.join(chars.split(' ')[:self.word_count])
 
 
@@ -86,4 +86,4 @@ class ItemFactory(MongoEngineFactory):
 
     user_ref = None
     content = FuzzyWords(length=10000)
-    date = datetime.now(timezone.utc).replace(tzinfo=pytz.utc).replace(hour=0, minute=0, second=0, microsecond=0)
+    date = datetime.now().replace(tzinfo=pytz.utc).replace(hour=0, minute=0, second=0, microsecond=0)

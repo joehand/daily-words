@@ -61,3 +61,7 @@ node_modules/*
 words/local.py
 
 TODOs.md
+
+*.bak
+
+.python-version
