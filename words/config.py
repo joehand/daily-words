@@ -57,7 +57,7 @@ class ProductionConfig(Config):
     #MongoDB Config
     MONGODB_SETTINGS = {
         'db': os.environ.get('MONGODB_DATABASE'),
-        'host': os.environ.get('MONGO_URL'),
+        'host': os.environ.get('MONGODB_URL'),
         'port': os.environ.get('MONGODB_PORT'),
         'username': os.environ.get('MONGODB_USERNAME'),
         'password': os.environ.get('MONGODB_PASSWORD'),
