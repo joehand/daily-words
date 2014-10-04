@@ -58,11 +58,12 @@ class ProductionConfig(Config):
     MONGODB_SETTINGS = {
         'db': os.environ.get('MONGODB_DATABASE'),
         'host': os.environ.get('MONGODB_URL'),
-        'port': os.environ.get('MONGODB_PORT'),
         'username': os.environ.get('MONGODB_USERNAME'),
         'password': os.environ.get('MONGODB_PASSWORD'),
         'tz_aware':True
     }
+
+    MONGODB_PORT = os.environ.get('MONGODB_PORT')
 
     # Flask S3 Config
     AWS_ACCESS_KEY_ID = os.environ.get('AWS_ACCESS_KEY_ID')
