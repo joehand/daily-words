@@ -24,15 +24,15 @@ class ItemModelTestCase(WritrTestCase):
 
     def test_item_date(self):
         item = Item.objects().first()
-        self.assertEqual(item.date.date(),date.today())
+        self.assertEqual(item.item_date,date.today())
 
     def test_item_istoday(self):
         item = Item.objects().first()
-        self.assertTrue(item.is_today())
+        self.assertTrue(item.is_today)
 
     def test_item_wordcount(self):
         item = Item.objects().first()
-        self.assertEqual(item.word_count(), 100)
+        self.assertEqual(item.word_count, 100)
 
     def test_item_last_update(self):
         item = Item.objects().first()

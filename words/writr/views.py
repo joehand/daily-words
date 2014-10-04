@@ -35,7 +35,7 @@ class ItemView(FlaskView):
             g.today = date.today()
             g.reached_goal = False
             g.last_item = Item.objects(user_ref=current_user.id).first()
-            if g.last_item and g.last_item.is_today() and g.last_item.reached_goal():
+            if g.last_item and g.last_item.is_today and g.last_item.reached_goal:
                 g.reached_goal = True
         else:
             return redirect(url_for('frontend.index'))
@@ -54,12 +54,12 @@ class ItemView(FlaskView):
         g.streak = 0
         if not items.first():
             pass
-        elif (g.today - items.first().item_date()) > timedelta(days=1):
+        elif (g.today - items.first().item_date) > timedelta(days=1):
             # if last item is over 1 day old we broke the streak =(
             pass
         else:
             for item in items:
-                if item.reached_goal():
+                if item.reached_goal:
                     g.streak += 1
                     continue
                 break
@@ -96,7 +96,7 @@ class ItemView(FlaskView):
                 flash('No item found for date: %s' %
                         date.strftime('%d-%b-%Y'))
                 return redirect(url_for('.write'))
-        return render_template('writr/item.html', item=item, is_today=item.is_today())
+        return render_template('writr/item.html', item=item, is_today=item.is_today)
 
 
 class ItemAPI(FlaskView):

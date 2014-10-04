@@ -38,15 +38,7 @@ class Item(db.Document):
             'ordering': ['-date']
             }
 
-    def clean(self):
-        """ Runs on each save
-
-            Currently:
-             - Updates last_update time to now
-
-        """
-        self.last_update = datetime.utcnow() #Refresh last update timestamp
-
+    @property
     def word_count(self):
         """ Returns number of words in item's content
             TODO: Does this match count I am doing on JS side for typing_speed?
@@ -59,30 +51,43 @@ class Item(db.Document):
             return len(words)
         return 0
 
+    @property
     def item_date(self):
         """ Shortcut to a date object (instead of datetime)
         """
         return self.date.date()
 
+    @property
     def is_today(self):
         """ Check if this model is today's model
             Returns True if is today
         """
         try:
-            return self.item_date() == date.today() # TODO: this may fail if item was just created, why?
+            return self.item_date == date.today() # TODO: this may fail if item was just created, why?
         except:
             return self.date == date.today()
 
+    @property
     def reached_goal(self):
         """ Returns True/False on whether word count >= 750
             TODO: Make goal adjustable
         """
-        return self.word_count() >= WORD_GOAL
+        return self.word_count >= WORD_GOAL
 
+    @property
     def writing_time(self):
         """ Returns total writing time based on start and last update
         """
         return self.last_update - self.start_time
+
+    def clean(self):
+        """ Runs on each save
+
+            Currently:
+             - Updates last_update time to now
+
+        """
+        self.last_update = datetime.utcnow() #Refresh last update timestamp
 
     def validate_json(self, inputJSON):
         """ Validates & cleans json from API before save
