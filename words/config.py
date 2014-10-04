@@ -55,7 +55,7 @@ class ProductionConfig(Config):
     FLASK_ASSETS_USE_S3 = True
 
     #MongoDB Config
-    MONGODB_DATABASE = os.environ.get('MONGODB_DATABASE')
+    MONGODB_DB = os.environ.get('MONGODB_DATABASE')
     MONGODB_HOST = os.environ.get('MONGODB_URL')
     MONGODB_USERNAME = os.environ.get('MONGODB_USERNAME')
     MONGODB_PASSWORD = os.environ.get('MONGODB_PASSWORD')
