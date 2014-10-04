@@ -10,8 +10,7 @@ define([
 ], function (Backbone, _) {
 
     var SAVE_DELAY = 1500,
-        FORCE_SAVE_TIME = 5000,//Force a save after this duration regardless of typing
-        FORCE_SAVE_CHARS = 100; //Force a save after this content change regardless of typing
+        FORCE_SAVE_CHARS = 150; //Force a save after this content change regardless of typing
 
     var Item = Backbone.Model.extend({
 
@@ -50,18 +49,19 @@ define([
 
             var last_save = this.get('last_save');
             if (!_.isUndefined(last_save)){
-                var time_diff = new Date().getTime() - last_save['time'],
-                    char_diff =  Math.abs(this.get('content').length - last_save['length']);
-                if (time_diff > FORCE_SAVE_TIME || char_diff > FORCE_SAVE_CHARS) {
+                var char_diff =  Math.abs(this.get('content').length - last_save['length']);
+                if (char_diff > FORCE_SAVE_CHARS) {
                     //console.log('doing force save');
-                    this.doSave();
+                    this.updateWordsTyped(true);
+                    _.defer(_.bind(this.doSave, this));
                 }
             } else {
                 last_save = {
-                    'time':new Date().getTime(),
-                    'length':this.get('content').length
-                }
-                this.set('last_save', last_save);
+                    'time':this.get('last_update'),
+                    'length':this.get('content').length,
+                    'word_count':this.get('word_count')
+                };
+                this.set('last_save', last_save, {silent: true});
             }
         },
 
@@ -70,28 +70,35 @@ define([
               Make sure model is dirty before we save
             */
             if (this.get('dirty') == true) {
-                this.doSave();
+                this.updateWordsTyped(true);
+                _.defer(_.bind(this.doSave, this));
             }
         }, SAVE_DELAY),
 
         doSave: _.throttle(function() {
-            /*Saves model to server after updating words typed array
+            /*Saves model to server
             */
-            this.updateWordsTyped(true);
             this.save(null, {
                 success: function(model, resp, opts) {
                     model.set('dirty', false);
+                    if (!_.isUndefined(model.get('last_update'))) {
+                        // need to make sure this is JS timestamp
+                        var date = new Date(model.get('last_update'));
+                        model.set('last_update', date.getTime(), {silent: true})
+                    }
+                    last_save = {
+                        'time':new Date().getTime(),
+                        'length':model.get('content').length,
+                        'word_count':model.get('word_count')
+                    };
+                    model.set('last_save', last_save, {silent: true});
+
                     if (opts.dirty) {
                         // saved locally
                         model.set('local_save', true);
                         console.info('Data saved locally');
                     } else {
                         // saved remotely
-                        last_save = {
-                            'time':new Date().getTime(),
-                            'length':model.get('content').length
-                        }
-                        model.set('last_save', last_save);
                         console.log('server save success');
                     }
                 },
@@ -124,8 +131,10 @@ define([
                 typingSpeed = this.get('typing_speed') || [];
 
             if (previous === true) {
-                wordDelta = this.get('word_count') - this.previous('word_count');
-                timeDelta = this.get('last_update') - this.previous('last_update');
+                var prevWordCount = this.get('last_save').word_count,
+                    prevLastUpdate = this.get('last_save').time;
+                wordDelta = this.get('word_count') - prevWordCount;
+                timeDelta = this.get('last_update') - prevLastUpdate;
             } else {
                 if (typingSpeed.length === 0) {
                     wordDelta = this.get('word_count');
@@ -134,7 +143,7 @@ define([
 
             typingSpeed.push({
                         'word_delta': wordDelta,
-                        'time_delta':timeDelta,
+                        'time_delta': timeDelta,
                     });
 
             this.set('typing_speed', typingSpeed);
