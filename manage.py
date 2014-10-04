@@ -73,7 +73,7 @@ def build():
 def initdb():
     '''Init/reset database.'''
     if not os.environ.get('PRODUCTION'):
-        db.connection.drop_database(app.config['MONGODB_DB'])
+        db.connection.drop_database(app.config['MONGODB_SETTINGS']['db'])
     user_datastore = MongoEngineUserDatastore(db, User, Role)
     admin = user_datastore.create_role(name='admin', description='Admin User')
     user = user_datastore.create_user(

@@ -55,11 +55,14 @@ class ProductionConfig(Config):
     FLASK_ASSETS_USE_S3 = True
 
     #MongoDB Config
-    MONGODB_DB = os.environ.get('MONGODB_DATABASE')
-    MONGODB_HOST = os.environ.get('MONGO_URL')
-    MONGODB_PORT = os.environ.get('MONGODB_PORT')
-    MONGODB_USERNAME = os.environ.get('MONGODB_USERNAME')
-    MONGODB_PASSWORD = os.environ.get('MONGODB_PASSWORD')
+    MONGODB_SETTINGS = {
+        'db': os.environ.get('MONGODB_DATABASE'),
+        'host': os.environ.get('MONGO_URL'),
+        'port': os.environ.get('MONGODB_PORT'),
+        'username': os.environ.get('MONGODB_USERNAME'),
+        'password': os.environ.get('MONGODB_PASSWORD'),
+        'tz_aware':True
+    }
 
     # Flask S3 Config
     AWS_ACCESS_KEY_ID = os.environ.get('AWS_ACCESS_KEY_ID')
@@ -68,6 +71,9 @@ class ProductionConfig(Config):
 class DevelopmentConfig(Config):
 
     # MongoDB Config
-    MONGODB_DB = 'words_db'
-    MONGODB_HOST = 'localhost'
-    MONGODB_PORT = 27017
+    MONGODB_SETTINGS = {
+        'db': 'words_db2',
+        'host':'localhost',
+        'port':27017,
+        'tz_aware':True
+    }

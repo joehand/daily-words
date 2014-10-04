@@ -9,7 +9,7 @@
     :license:
 """
 
-from datetime import datetime, date
+from datetime import datetime, date, timezone
 import json
 import re
 
@@ -26,9 +26,11 @@ class Item(db.Document):
     """
     user_ref = db.ReferenceField(User)
     content = db.StringField()
-    date = db.DateTimeField(default=date.today(), required=True, unique_with='user_ref')
-    start_time = db.DateTimeField(default=datetime.utcnow(), required=True)
-    last_update = db.DateTimeField(default=datetime.utcnow(), required=True)
+    date = db.DateTimeField(default=datetime.now(timezone.utc).replace(
+                                hour=0, minute=0, second=0, microsecond=0),
+                                required=True, unique_with='user_ref')
+    start_time = db.DateTimeField(default=datetime.now(timezone.utc), required=True)
+    last_update = db.DateTimeField(default=datetime.now(timezone.utc), required=True)
 
     # List of dicts containing change in words & time
     #    {word_delta:int, time_delta:int}
@@ -87,7 +89,7 @@ class Item(db.Document):
              - Updates last_update time to now
 
         """
-        self.last_update = datetime.utcnow() #Refresh last update timestamp
+        self.last_update = datetime.now(timezone.utc) #Refresh last update timestamp
 
     def validate_json(self, inputJSON):
         """ Validates & cleans json from API before save
@@ -132,3 +134,12 @@ class Item(db.Document):
             else:
                 data[key] = self[key]
         return data
+
+class Settings(db.Document):
+    user_ref = db.ReferenceField(User)
+    word_goal = db.IntField(default=750)
+    time_zone = db.StringField()
+
+    @property
+    def utc_offset(self):
+        return 0

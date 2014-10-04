@@ -5,7 +5,7 @@
 
     writr tests package
 """
-from datetime import date, datetime
+from datetime import date, datetime, timezone
 
 from . import WritrTestCase
 from ..factories import ItemFactory
@@ -38,5 +38,5 @@ class ItemModelTestCase(WritrTestCase):
         item = Item.objects().first()
         item.content = 'joe'
         item.save()
-        delta = datetime.utcnow() - item.last_update
+        delta = datetime.now(timezone.utc) - item.last_update
         self.assertAlmostEqual(delta.total_seconds(), 0, places=2)
