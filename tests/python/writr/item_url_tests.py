@@ -7,6 +7,8 @@
 """
 from datetime import date, datetime
 
+import pytz
+
 from flask import url_for
 
 from . import WritrTestCase
@@ -26,7 +28,7 @@ class ItemUrlTestCase(WritrTestCase):
         self.assertIn(date.today().strftime('%d %b %Y'), r.data.decode())
 
     def test_item_old(self):
-        OLD_DATE = date(2008,1,1)
+        OLD_DATE = datetime(2008,1,1).replace(tzinfo=pytz.utc)
         self.item_old = ItemFactory(user_ref=self.user.id, date=OLD_DATE)
         r = self.get(url_for('writr.item', date=OLD_DATE.strftime('%d-%b-%Y')))
         self.assertOk(r)

@@ -8,6 +8,8 @@
 from datetime import date, datetime
 import json
 
+import pytz
+
 from flask import url_for
 
 from . import WritrTestCase
@@ -26,7 +28,7 @@ class ItemAPITestCase(WritrTestCase):
 
     def test_item_get_all(self):
         for i in range(1,10):
-            ItemFactory(user_ref=self.user.id, date=date(2008,1,i))
+            ItemFactory(user_ref=self.user.id, date=datetime(2008,1,i).replace(tzinfo=pytz.utc))
 
         r = self.jget(url_for('writr.ItemAPI:index'))
         self.assertOkJson(r)

@@ -6,8 +6,10 @@
     Test factories module
 """
 
-from datetime import datetime, date
+from datetime import datetime, date, timezone
 import random
+
+import pytz
 
 from factory import Factory, LazyAttribute, Sequence, RelatedFactory
 from factory.fuzzy import FuzzyText
@@ -84,4 +86,4 @@ class ItemFactory(MongoEngineFactory):
 
     user_ref = None
     content = FuzzyWords(length=10000)
-    date = date.today()
+    date = datetime.now(timezone.utc).replace(tzinfo=pytz.utc).replace(hour=0, minute=0, second=0, microsecond=0)

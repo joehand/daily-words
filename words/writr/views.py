@@ -13,13 +13,15 @@ from datetime import date, datetime, timedelta
 import json
 import sys
 
+import pytz
+
 from flask import (Blueprint, current_app, flash, g, jsonify,
                     redirect, render_template, request, url_for)
 
 from flask_classy import FlaskView, route
 from flask_security import current_user, login_required
 
-from .models import Item
+from .models import Item, Settings
 
 writr = Blueprint('writr', __name__, url_prefix='')
 
@@ -30,9 +32,15 @@ class ItemView(FlaskView):
     route_base = '/'
     decorators = [login_required]
 
+    def before_first_request(self, name, *args , **kwargs):
+        if not Settings.objects(user_ref=current_user.id).first():
+            settings = Settings.objects(user_ref=current_user.id)
+            settings.save()
+
     def before_request(self, name, *args , **kwargs):
         if current_user.is_authenticated():
-            g.today = date.today()
+            g.settings = Settings.objects(user_ref=current_user.id).first()
+            g.today = datetime.utcnow().replace(tzinfo = pytz.utc).date()
             g.reached_goal = False
             g.last_item = Item.objects(user_ref=current_user.id).first()
             if g.last_item and g.last_item.is_today and g.last_item.reached_goal:

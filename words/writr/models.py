@@ -12,13 +12,19 @@
 from datetime import datetime, date, timezone
 import json
 import re
+from functools import wraps
 
 import bleach
+import pytz
 
 from ..extensions import db
 from ..user import User
 
-WORD_GOAL = 750
+
+def localize(tz, dt):
+    dt = dt.replace(tzinfo=pytz.utc) #TODO: this is a hack. Should be created with tzinfo.
+    return dt.astimezone(pytz.timezone(tz))
+
 
 class Item(db.Document):
     """ This is the main model.
@@ -26,11 +32,19 @@ class Item(db.Document):
     """
     user_ref = db.ReferenceField(User)
     content = db.StringField()
-    date = db.DateTimeField(default=datetime.now(timezone.utc).replace(
-                                hour=0, minute=0, second=0, microsecond=0),
-                                required=True, unique_with='user_ref')
-    start_time = db.DateTimeField(default=datetime.now(timezone.utc), required=True)
-    last_update = db.DateTimeField(default=datetime.now(timezone.utc), required=True)
+    date = db.DateTimeField(required=True, unique_with='user_ref',
+                                default=datetime.now(timezone.utc)
+                                    .replace(tzinfo=pytz.utc)
+                                    .replace(hour=0, minute=0, second=0, microsecond=0)
+                            )
+    start_time = db.DateTimeField(required=True,
+                                    default=datetime.now(timezone.utc)
+                                        .replace(tzinfo=pytz.utc)
+                                )
+    last_update = db.DateTimeField(required=True,
+                                    default=datetime.now(timezone.utc)
+                                        .replace(tzinfo=pytz.utc)
+                                )
 
     # List of dicts containing change in words & time
     #    {word_delta:int, time_delta:int}
@@ -39,6 +53,22 @@ class Item(db.Document):
     meta = {
             'ordering': ['-date']
             }
+
+    @property
+    def tz(self):
+        settings = Settings.objects(user_ref=self.user_ref).first()
+        if not settings:
+            settings = Settings(user_ref=self.user_ref)
+            settings.save()
+        return settings['tz']
+
+    @property
+    def word_goal(self):
+        settings = Settings.objects(user_ref=self.user_ref).first()
+        if not settings:
+            settings = Settings(user_ref=self.user_ref)
+            settings.save()
+        return settings['word_goal']
 
     @property
     def word_count(self):
@@ -54,6 +84,14 @@ class Item(db.Document):
         return 0
 
     @property
+    def local_start_time(self):
+        return localize(self.tz, self.start_time)
+
+    @property
+    def local_last_update(self):
+        return localize(self.tz, self.last_update)
+
+    @property
     def item_date(self):
         """ Shortcut to a date object (instead of datetime)
         """
@@ -65,16 +103,17 @@ class Item(db.Document):
             Returns True if is today
         """
         try:
-            return self.item_date == date.today() # TODO: this may fail if item was just created, why?
+            # TODO: this may fail if item was just created, why?
+            return self.item_date == datetime.utcnow().replace(tzinfo = pytz.utc).date()
         except:
-            return self.date == date.today()
+            return self.date == datetime.utcnow().replace(tzinfo = pytz.utc).date()
 
     @property
     def reached_goal(self):
         """ Returns True/False on whether word count >= 750
             TODO: Make goal adjustable
         """
-        return self.word_count >= WORD_GOAL
+        return self.word_count >= self.word_goal
 
     @property
     def writing_time(self):
@@ -87,9 +126,8 @@ class Item(db.Document):
 
             Currently:
              - Updates last_update time to now
-
         """
-        self.last_update = datetime.now(timezone.utc) #Refresh last update timestamp
+        self.last_update = datetime.now(timezone.utc).replace(tzinfo=pytz.utc)
 
     def validate_json(self, inputJSON):
         """ Validates & cleans json from API before save
@@ -103,7 +141,7 @@ class Item(db.Document):
                 try:
                     # divide by 1000 because JS timestamp is in ms
                     # http://stackoverflow.com/questions/10286224/javascript-timestamp-to-python-datetime-conversion
-                    val = datetime.utcfromtimestamp(val/1000.0)
+                    val = datetime.utcfromtimestamp(val/1000.0).replace(tzinfo=pytz.utc)
                 except:
                     continue
             elif key == 'content' and val != None and val != 'None':
@@ -136,10 +174,6 @@ class Item(db.Document):
         return data
 
 class Settings(db.Document):
-    user_ref = db.ReferenceField(User)
+    user_ref = db.ReferenceField(User, unique=True)
     word_goal = db.IntField(default=750)
-    time_zone = db.StringField()
-
-    @property
-    def utc_offset(self):
-        return 0
+    tz = db.StringField(default='US/Mountain')
