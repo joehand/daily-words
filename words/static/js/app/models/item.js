@@ -104,9 +104,12 @@ define([
 
         setWordCount: function() {
             var regex = /\s+/gi,
-                len = this.get('content').trim()
-                        .replace('<br>', ' ').replace(/[^a-zA-Z\s]/g, '') // replace pesky things
-                        .replace(regex, ' ').split(' ').length;
+                wordRegex = /[\w]+/,
+                words = this.get('content').trim()
+                        .replace(/<br\s*[\/]?>/gi, '\n').replace(/&nbsp;/g, ' ') // replace pesky things
+                        .replace(/[^a-zA-Z0-9\s]/g, '') // replace pesky things
+                        .replace(regex, ' ').split(' ');
+                len = _.filter(words, function(word){ return word.match(wordRegex) }).length;
             this.set('word_count', len);
         },
 
