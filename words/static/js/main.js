@@ -10,6 +10,7 @@ define([
     'views/app',
     'models/app',
     'models/items',
+    'models/item',
     'backbone.stickit',
     'Backbone.dualStorage',
 ], function (Backbone, $, _, AppView, AppModel, Items) {
