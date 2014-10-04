@@ -4,12 +4,12 @@ Flask-Classy==0.6.10
 Flask-Login==0.2.11
 Flask-Mail==0.9.1
 Flask-Principal==0.4.0
--e git://github.com/joehand/flask-s3.git@b92137cb2720863213f577a43129f73812b4fcf3#egg=Flask_S3-origin/Python3-Support
+Flask-S3==0.1.7
 Flask-Script==2.0.5
 Flask-Security==1.7.3
 Flask-Testing==0.4.2
 Flask-WTF==0.10.2
--e git://github.com/joehand/flask-fillin.git@dcf9d66b43a21cd37d380cc1a8f9c3f0022c4f5b#egg=Flask_fillin-origin/master
+Flask-fillin==0.2
 Jinja2==2.7.3
 MarkupSafe==0.23
 WTForms==2.0.1

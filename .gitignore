@@ -1,7 +1,7 @@
 ###Python###
 
 venv
-venv3
+myenv
 
 *.py[cod]
 
