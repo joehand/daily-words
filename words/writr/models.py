@@ -33,17 +33,14 @@ class Item(db.Document):
     user_ref = db.ReferenceField(User)
     content = db.StringField()
     date = db.DateTimeField(required=True, unique_with='user_ref',
-                                default=datetime.now()
-                                    .replace(tzinfo=pytz.utc)
+                                default=datetime.now(pytz.utc)
                                     .replace(hour=0, minute=0, second=0, microsecond=0)
                             )
     start_time = db.DateTimeField(required=True,
-                                    default=datetime.now()
-                                        .replace(tzinfo=pytz.utc)
+                                    default=datetime.now(pytz.utc)
                                 )
     last_update = db.DateTimeField(required=True,
-                                    default=datetime.now()
-                                        .replace(tzinfo=pytz.utc)
+                                    default=datetime.now(pytz.utc)
                                 )
 
     # List of dicts containing change in words & time
@@ -104,9 +101,9 @@ class Item(db.Document):
         """
         try:
             # TODO: this may fail if item was just created, why?
-            return self.item_date == datetime.utcnow().replace(tzinfo = pytz.utc).date()
+            return self.item_date == datetime.now(pytz.timezone(self.tz)).date()
         except:
-            return self.date == datetime.utcnow().replace(tzinfo = pytz.utc).date()
+            return self.date == datetime.now(pytz.timezone(self.tz)).date()
 
     @property
     def reached_goal(self):
@@ -127,7 +124,7 @@ class Item(db.Document):
             Currently:
              - Updates last_update time to now
         """
-        self.last_update = datetime.now().replace(tzinfo=pytz.utc)
+        self.last_update = datetime.now(pytz.utc)
 
     def validate_json(self, inputJSON):
         """ Validates & cleans json from API before save
