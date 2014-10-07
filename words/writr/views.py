@@ -99,7 +99,7 @@ class ItemView(FlaskView):
         if item is None:
             if date == g.today:
                 # Create a new item for today
-                item = Item(user_ref=current_user.id, date=date.today())
+                item = Item(user_ref=current_user.id, date=date.date())
                 item.save()
             else:
                 flash('No item found for date: %s' %
