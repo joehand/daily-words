@@ -95,7 +95,7 @@ class ItemView(FlaskView):
 
         item = Item.objects(
                 user_ref=current_user.id, date=date).first()
-
+        print(date)
         if item is None:
             if date == g.today:
                 # Create a new item for today
