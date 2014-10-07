@@ -40,7 +40,7 @@ class ItemView(FlaskView):
     def before_request(self, name, *args , **kwargs):
         if current_user.is_authenticated():
             g.settings = Settings.objects(user_ref=current_user.id).first()
-            g.today = datetime.now(pytz.timezone(g.settings['tz')).date()
+            g.today = datetime.now(pytz.timezone(g.settings['tz'])).date()
             print (g.today)
             g.reached_goal = False
             g.last_item = Item.objects(user_ref=current_user.id).first()
