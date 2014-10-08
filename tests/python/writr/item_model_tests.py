@@ -12,7 +12,7 @@ import pytz
 from . import WritrTestCase
 from ..factories import ItemFactory
 
-from words.writr import Item
+from words.writr import Item, Settings
 
 
 class ItemModelTestCase(WritrTestCase):
@@ -38,7 +38,8 @@ class ItemModelTestCase(WritrTestCase):
 
     def test_item_last_update(self):
         item = Item.objects().first()
+        tz = Settings.objects().first()['tz']
         item.content = 'joe'
         item.save()
-        delta = datetime.now().replace(tzinfo=pytz.utc) - item.last_update
+        delta = datetime.now(pytz.timezone(tz)) - item.last_update
         self.assertAlmostEqual(delta.total_seconds(), 0, places=2)

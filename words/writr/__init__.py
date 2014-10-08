@@ -10,4 +10,4 @@
 """
 
 from .views import writr
-from .models import Item
+from .models import Item, Settings

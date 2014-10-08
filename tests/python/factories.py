@@ -20,7 +20,7 @@ from flask_security.utils import encrypt_password
 
 from words.extensions import db
 from words.user import User, Role
-from words.writr import Item
+from words.writr import Item, Settings
 
 
 ds = MongoEngineUserDatastore(db, User, Role)
@@ -87,3 +87,9 @@ class ItemFactory(MongoEngineFactory):
     user_ref = None
     content = FuzzyWords(length=10000)
     date = datetime.now().replace(tzinfo=pytz.utc).replace(hour=0, minute=0, second=0, microsecond=0)
+
+class SettingsFactory(MongoEngineFactory):
+    class Meta:
+        model = Settings
+
+    user_ref = None
