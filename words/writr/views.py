@@ -41,7 +41,6 @@ class ItemView(FlaskView):
         if current_user.is_authenticated():
             g.settings = Settings.objects(user_ref=current_user.id).first()
             g.today = datetime.now(pytz.timezone(g.settings['tz'])).date()
-            print (g.today)
             g.reached_goal = False
             g.last_item = Item.objects(user_ref=current_user.id).first()
             if g.last_item and g.last_item.is_today and g.last_item.reached_goal:
@@ -95,11 +94,11 @@ class ItemView(FlaskView):
 
         item = Item.objects(
                 user_ref=current_user.id, date=date).first()
-        print(date)
+
         if item is None:
             if date == g.today:
                 # Create a new item for today
-                item = Item(user_ref=current_user.id, date=date.date())
+                item = Item(user_ref=current_user.id, date=g.today)
                 item.save()
             else:
                 flash('No item found for date: %s' %
