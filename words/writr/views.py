@@ -66,8 +66,12 @@ class ItemView(FlaskView):
             # if last item is over 1 day old we broke the streak =(
             pass
         else:
+            prev_date = items.first().item_date
             for item in items:
-                if item.reached_goal:
+                item_date = item.item_date
+                if item.reached_goal and \
+                        (prev_date - item_date) > timedelta(days=1):
+                    prev_date = item_date
                     g.streak += 1
                     continue
                 break
