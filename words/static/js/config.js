@@ -22,7 +22,7 @@ require.config({
     },
     underscore: {
       exports: '_'
-    },
+    }
   },
   paths: {
     models: 'app/models',
@@ -33,6 +33,10 @@ require.config({
     underscore: '../ext/underscore/underscore',
     'backbone.stickit': '../ext/backbone.stickit/backbone.stickit',
     'Backbone.dualStorage': '../ext/Backbone.dualStorage/Backbone.dualStorage',
+    codemirror: '../ext/codemirror',
+    jasmine: '../ext/jasmine/lib/jasmine-core',
+    'jasmine-sinon': '../ext/jasmine-sinon/lib/jasmine-sinon',
+    sinon: '../ext/sinon/lib/sinon'
   },
   packages: [
 

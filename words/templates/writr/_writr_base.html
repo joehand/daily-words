@@ -1,5 +1,10 @@
 {% extends "_base.html" %}
 
+{% block css -%}
+{{ css.render_css('main') }}
+<link rel="stylesheet" href="{{url_for('static',filename='ext/codemirror/lib/codemirror.css')}}">
+{%- endblock %}
+
 {% set navigation_bar = [
     ('.dash', 'Home'),
     ('.write', 'Write'),

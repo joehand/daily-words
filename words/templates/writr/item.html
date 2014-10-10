@@ -22,11 +22,11 @@
             {{item.date|format_date}}
         </h2>
         {% if is_today %}
-        <div class="item-content writr-edit" autofocus="true" contenteditable="true">
+        <textarea class="item-content writr-edit" autofocus="true" contenteditable="true">
             {%- if item.content -%}
             {{item.content|safe}}
             {%- endif -%}
-        </div>
+        </textarea>
         {% else %}
         <div class="item-content writr-stale">
             {{item.content|markdown|safe}}

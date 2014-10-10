@@ -8,7 +8,9 @@ define([
     'backbone',
     'underscore',
     'jquery',
-], function (Backbone, _, $) {
+    'codemirror/lib/codemirror',
+    'codemirror/mode/markdown/markdown'
+], function (Backbone, _, $, CodeMirror) {
 
     var ItemView = Backbone.View.extend({
 
@@ -75,6 +77,18 @@ define([
             console.log(this);
             this.stickit();
             this.$inputEl.focus();
+            cm = CodeMirror.fromTextArea(this.$inputEl[0], {
+                value: 'Start Writing!',
+                mode: "markdown",
+                  lineNumbers: true,
+                  matchBrackets: true,
+                  lineWrapping: true,
+                  theme: 'default',
+            });
+            cm.on("change", function(cm, change) {
+              console.log("something changed! (" + change.origin + ")");
+                console.log(cm.getValue());
+            });
             return this;
         },
 
