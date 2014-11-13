@@ -73,9 +73,9 @@ class ItemView(FlaskView):
             pass
         else:
             prev_date = items.first().item_date
-            for item in items:
+            for item in items[1:]:
                 item_date = item.item_date
-                if item.reached_goal and \
+                if item.reached_goal and not item.is_today and \
                         (prev_date - item_date) < timedelta(days=1):
                     prev_date = item_date
                     g.streak += 1
