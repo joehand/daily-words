@@ -124,6 +124,8 @@ class Item(db.Document):
             Currently:
              - Updates last_update time to now
         """
+        if not self.start_time:
+            self.start_time = datetime.now(pytz.utc)
         self.last_update = datetime.now(pytz.utc)
 
     def validate_json(self, inputJSON):
