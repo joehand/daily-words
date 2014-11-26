@@ -70,7 +70,7 @@ class Item(db.Document):
         """
         regex = '/\s+/gi'
         if self.content:
-            content = self.content.strip().replace('<br\s*[\/]?>', ' ')
+            content = self.content.strip().replace('<br>', ' ') #TODO: Better <br> regex
             words = re.sub(regex, ' ', content).split()
             words = [word for word in words if re.match('[\w]+', word) is not None]
             return len(words)
