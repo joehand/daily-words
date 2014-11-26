@@ -108,7 +108,8 @@ class ItemView(FlaskView):
         if item is None:
             if date == g.today:
                 # Create a new item for today
-                item = Item(user_ref=current_user.id, date=g.today)
+                item = Item(user_ref=current_user.id, date=g.today,
+                                start_time=datetime.now(pytz.utc))
                 item.save()
             else:
                 flash('No item found for date: %s' %

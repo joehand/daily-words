@@ -36,12 +36,8 @@ class Item(db.Document):
                                 default=datetime.now(pytz.utc)
                                     .replace(hour=0, minute=0, second=0, microsecond=0)
                             )
-    start_time = db.DateTimeField(required=True,
-                                    default=datetime.now(pytz.utc)
-                                )
-    last_update = db.DateTimeField(required=True,
-                                    default=datetime.now(pytz.utc)
-                                )
+    start_time = db.DateTimeField(required=True)
+    last_update = db.DateTimeField(required=True)
 
     # List of dicts containing change in words & time
     #    {word_delta:int, time_delta:int}
@@ -116,6 +112,8 @@ class Item(db.Document):
     def writing_time(self):
         """ Returns total writing time based on start and last update
         """
+        print (self.last_update)
+        print (self.start_time)
         return self.last_update - self.start_time
 
     def clean(self):
