@@ -66,6 +66,7 @@ class ItemView(FlaskView):
         if items.first() and \
                 items.first().is_today and items.first().reached_goal:
             g.streak += 1
+            streak_items = items[1:]
         if not items.first():
             pass
         elif (g.today - items.first().item_date) > timedelta(days=1):
@@ -73,10 +74,10 @@ class ItemView(FlaskView):
             pass
         else:
             prev_date = items.first().item_date
-            for item in items[1:]:
+            for item in streak_items:
                 item_date = item.item_date
                 if item.reached_goal and not item.is_today and \
-                        (prev_date - item_date) < timedelta(days=1):
+                        (prev_date - item_date) <= timedelta(days=1):
                     prev_date = item_date
                     g.streak += 1
                     continue
