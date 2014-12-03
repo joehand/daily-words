@@ -112,8 +112,6 @@ class Item(db.Document):
     def writing_time(self):
         """ Returns total writing time based on start and last update
         """
-        print (self.last_update)
-        print (self.start_time)
         return self.last_update - self.start_time
 
     def clean(self):
